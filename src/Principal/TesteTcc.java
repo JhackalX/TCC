@@ -5,13 +5,13 @@
  */
 package Principal;
 
+import static Funcoes.Funcionalidades.addObjdoArq;
 import Janela.Layout;
+import ObjDao.Cidades;
 import ObjDao.Medicao;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 
 
 
@@ -36,11 +36,9 @@ public class TesteTcc {
         //Bloco de teste
         
         SimpleDateFormat dateFormate = new SimpleDateFormat("dd/MM/yy");
-        List<Medicao> lista = new ArrayList<Medicao>();
+        Cidades cidade = new Cidades();
         try{
-            
-            
-            
+                        
             Medicao med1 = new Medicao(dateFormate.parse("02/05/2020"), (int)2300, (float) 16.3);
             //System.out.println(med1.toString());
         
@@ -53,37 +51,33 @@ public class TesteTcc {
             Medicao med4 = new Medicao(dateFormate.parse("02/05/2020"), (int)100, (float) 24.4);
             //System.out.println(med2.toString());
             
-            Medicao med5 = new Medicao(dateFormate.parse("01/01/2022"), (int)400, (float) 34.4);
-            //System.out.println(med2.toString());
-            
+            addObjdoArq("2017-03-21;0800;null;",cidade);
+            //System.out.println(med2.toString());            
             
             Medicao med6 = new Medicao(dateFormate.parse("24/05/2009"), (int)1500, (float) 18.4);
             //System.out.println(med2.toString());
-            
-            
-            Medicao med7 = new Medicao(dateFormate.parse("02/05/2010"), (int)1000, (float) 23.4);
+                      
+            Medicao med7 = new Medicao(dateFormate.parse("02/05/2020"), (int)2300, (float) 16.3);
             //System.out.println(med2.toString());
-            
-            
+                      
             Medicao med8 = new Medicao(dateFormate.parse("02/07/2015"), (int)2000, (float) 21.4);
             //System.out.println(med2.toString());
-            
-            
+                     
             Medicao med9 = new Medicao(dateFormate.parse("29/05/2017"), (int)1800, (float) 09.4);
             //System.out.println(med2.toString());
             
             //System.out.println(med1.compareTo(med2));
-            med1.adicionarMedicao(lista, med1);
-            med1.adicionarMedicao(lista, med2);
-            med1.adicionarMedicao(lista, med3);
-            med1.adicionarMedicao(lista, med4);
-            med1.adicionarMedicao(lista, med5);
-            med1.adicionarMedicao(lista, med6);
-            med1.adicionarMedicao(lista, med7);
-            med1.adicionarMedicao(lista, med8);
-            med1.adicionarMedicao(lista, med9);
+            cidade.adicionarMedicao(med1);
+            cidade.adicionarMedicao(med2);
+            cidade.adicionarMedicao(med3);
+            cidade.adicionarMedicao(med4);
             
-            lista.get(0).listarMedicao(lista);
+            cidade.adicionarMedicao(med6);
+            cidade.adicionarMedicao(med7);
+            cidade.adicionarMedicao(med8);
+            cidade.adicionarMedicao(med9);
+            cidade.excluirMedicaoInvalida();
+            cidade.listarMedicao();
         }catch (ParseException ex){
             System.out.println("DEU  RUIM");
         }

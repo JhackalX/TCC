@@ -5,8 +5,8 @@
  */
 package ObjDao;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -92,57 +92,22 @@ public class Medicao implements Comparable<Medicao> {
     //to string
     @Override
     public String toString() {
-        return "Medicao{" + "data: " + data + 
+        SimpleDateFormat dateFormate = new SimpleDateFormat("yyyy-MM-dd");
+        if(temperatura == 99999.0){
+            return "Medicao{" + "data: " + dateFormate.format(data) + 
+                                ", hora: " + hora + 
+                                ", temperatura: null" +'}';
+        }else{
+            return "Medicao{" + "data: " + dateFormate.format(data) + 
                         ", hora: " + hora + 
                         ", temperatura: " + temperatura + '}';
+        }
+        
     }
     
     //funções práticas de lista
     
-    public void adicionarMedicao(List<Medicao> Lista, Medicao Obj){
-        if(!Lista.contains(Obj)){
-            Lista.add(Obj);
-            Obj.ordenarLista(Lista);
-        }
-    }
     
-    public void editarMedicao(List<Medicao> Lista, Medicao Obj, int i){
-        Lista.get(i).setData(Obj.getData());
-        Lista.get(i).setHora(Obj.getHora());
-        Lista.get(i).setTemperatura(Obj.getTemperatura());   
-    }
-    
-    public void excluirMedicao(List<Medicao> Lista, Medicao Obj){
-        Lista.remove(Obj);
-    }
-    
-    public void limparGeral(List<Medicao> Lista){
-        Lista.removeAll(Lista);
-    }
-    public void ordenarLista(List<Medicao> Lista){
-       boolean troca = true;
-       Medicao aux = new Medicao();
-       while (troca){
-           troca = false;
-           for(int i = 0; i < Lista.size()-1; i++){
-               if(Lista.get(i).compareTo(Lista.get(i+1)) > 0){
-                   aux.setData(Lista.get(i).getData());
-                   aux.setHora(Lista.get(i).getHora());
-                   aux.setTemperatura(Lista.get(i).getTemperatura());
-                   aux.editarMedicao(Lista, Lista.get(i+1), i);
-                   aux.editarMedicao(Lista, aux, i+1);
-                   troca = true;                   
-               }          
-           }
-       }      
-    }
-    
-    public void listarMedicao(List<Medicao> Lista){
-        for (int i = 0; i<Lista.size(); i++){
-            System.out.println(Lista.get(i).toString());
-        }
-        
-    }
     //funções práticas de objeto
     
     public void limpar(){
