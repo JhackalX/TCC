@@ -20,6 +20,7 @@ public class Cidades {
     private String latitude;
     private String longitude;
     private String altitude;
+    private String situacao;
     private Date dataInicial;
     private Date dataFinal;
     private String tipoDeMedicao;
@@ -34,7 +35,8 @@ public class Cidades {
                    String estacao, 
                    String latitude, 
                    String longitude, 
-                   String altitude, 
+                   String altitude,
+                   String situacao,
                    Date dataInicial, 
                    Date dataFinal, 
                    String tipoDeMedicao) {
@@ -43,6 +45,7 @@ public class Cidades {
         this.latitude = latitude;
         this.longitude = longitude;
         this.altitude = altitude;
+        this.situacao = situacao;
         this.dataInicial = dataInicial;
         this.dataFinal = dataFinal;
         this.tipoDeMedicao = tipoDeMedicao;
@@ -121,18 +124,27 @@ public class Cidades {
         this.lista = lista;
     }
 
+    public String getSituacao() {
+        return situacao;
+    }
+
+    public void setSituacao(String situacao) {
+        this.situacao = situacao;
+    }
+
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 79 * hash + Objects.hashCode(this.nome);
-        hash = 79 * hash + Objects.hashCode(this.estacao);
-        hash = 79 * hash + Objects.hashCode(this.latitude);
-        hash = 79 * hash + Objects.hashCode(this.longitude);
-        hash = 79 * hash + Objects.hashCode(this.altitude);
-        hash = 79 * hash + Objects.hashCode(this.dataInicial);
-        hash = 79 * hash + Objects.hashCode(this.dataFinal);
-        hash = 79 * hash + Objects.hashCode(this.tipoDeMedicao);
-        hash = 79 * hash + Objects.hashCode(this.lista);
+        int hash = 3;
+        hash = 23 * hash + Objects.hashCode(this.nome);
+        hash = 23 * hash + Objects.hashCode(this.estacao);
+        hash = 23 * hash + Objects.hashCode(this.latitude);
+        hash = 23 * hash + Objects.hashCode(this.longitude);
+        hash = 23 * hash + Objects.hashCode(this.altitude);
+        hash = 23 * hash + Objects.hashCode(this.situacao);
+        hash = 23 * hash + Objects.hashCode(this.dataInicial);
+        hash = 23 * hash + Objects.hashCode(this.dataFinal);
+        hash = 23 * hash + Objects.hashCode(this.tipoDeMedicao);
+        hash = 23 * hash + Objects.hashCode(this.lista);
         return hash;
     }
 
@@ -163,6 +175,9 @@ public class Cidades {
         if (!Objects.equals(this.altitude, other.altitude)) {
             return false;
         }
+        if (!Objects.equals(this.situacao, other.situacao)) {
+            return false;
+        }
         if (!Objects.equals(this.tipoDeMedicao, other.tipoDeMedicao)) {
             return false;
         }
@@ -180,16 +195,19 @@ public class Cidades {
 
     @Override
     public String toString() {
-        return "Cidade{" + "nome: " + nome + ", "
-                          + "estacao: " + estacao + ", "
-                          + "latitude: " + latitude + ", "
-                          + "longitude: " + longitude + ", "
-                          + "altitude: " + altitude + ", "
-                          + "dataInicial: " + dataInicial + ", "
-                          + "dataFinal: " + dataFinal + ", "
-                          + "tipoDeMedicao: " + tipoDeMedicao + '}';
+        return "Cidades{" + "Nome: " + nome + ", "
+                          + "Estacao: " + estacao + ", "
+                          + "Latitude: " + latitude + ", "
+                          + "Longitude: " + longitude + ", "
+                          + "Altitude: " + altitude + ", "
+                          + "Situacao: " + situacao + ", "
+                          + "Data Inicial:" + dataInicial + ", "
+                          + "Data Final:" + dataFinal + ", "
+                          + "Tipo De Medicao:" + tipoDeMedicao + ", "
+                          + "Lista:";
     }
-    
+
+
     public void adicionarMedicao(Medicao Obj){
         if(!this.lista.contains(Obj)){
             this.lista.add(Obj);

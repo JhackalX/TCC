@@ -42,6 +42,7 @@ public class Funcionalidades {
         
         String[] campos = linha.split(";");
         SimpleDateFormat dateFormate = new SimpleDateFormat("yyyy-MM-dd");
+
         if (campos[2].equals("null")){
             campos[2] = "99999,0";
         }
@@ -52,7 +53,50 @@ public class Funcionalidades {
         cidade.adicionarMedicao(obj);    
     }
     
-    
+    public static void addCabecalho (String linha, Cidades cidade) throws ParseException{
+        
+        String[] campos = linha.split(":");
+        SimpleDateFormat dateFormate = new SimpleDateFormat("yyyy-MM-dd");
+        System.out.println(campos[0]);
+        System.out.println("periodicidade de medicao");
+        if (campos[0].toLowerCase().equals("nome")){
+            cidade.setNome(campos[1]);
+        }else{
+            if(campos[0].toLowerCase().equals("codigo estacao")){
+                cidade.setEstacao(campos[1]);
+            }else{
+                if (campos[0].toLowerCase().equals("latitude")){
+                    cidade.setLatitude(campos[1]);
+                }else{
+                    if(campos[0].toLowerCase().equals("logitude")){
+                        cidade.setLongitude(campos[1]);
+                    }else{
+                       if (campos[0].toLowerCase().equals("altitude")){
+                            cidade.setAltitude(campos[1]);
+                        }else{
+                            if(campos[0].toLowerCase().equals("situacao")){
+                                cidade.setSituacao(campos[1]);
+                            }else{
+                                if (campos[0].toLowerCase().equals("data inicial")){
+                                    cidade.setDataInicial(dateFormate.parse(campos[1]));
+                                }else{
+                                    if(campos[0].toLowerCase().equals("data final")){
+                                        cidade.setDataFinal(dateFormate.parse(campos[1]));
+                                    }else{
+                                        if(campos[0].trim().equalsIgnoreCase("periodicidade de medicao")){
+                                            cidade.setTipoDeMedicao(campos[1]);
+                                        }else{
+                                            System.out.println("Linha não condiz com a especificação do documento...");
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }            
+        }    
+    }    
     
     //procura o cabecalho no arquivo para saber se o arquivo é valido
     //tem que testar....

@@ -5,6 +5,7 @@
  */
 package Principal;
 
+import static Funcoes.Funcionalidades.addCabecalho;
 import static Funcoes.Funcionalidades.addObjdoArq;
 import Janela.Layout;
 import ObjDao.Cidades;
@@ -53,7 +54,7 @@ public class TesteTcc {
             
             addObjdoArq("2017-03-21;0800;null;",cidade);
             //System.out.println(med2.toString());            
-            
+            addCabecalho("Periodicidade da Medicao: Horaria", cidade);
             Medicao med6 = new Medicao(dateFormate.parse("24/05/2009"), (int)1500, (float) 18.4);
             //System.out.println(med2.toString());
                       
