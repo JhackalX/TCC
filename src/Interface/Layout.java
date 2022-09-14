@@ -1031,13 +1031,8 @@ public class Layout extends javax.swing.JFrame {
         try {
             modelo = new DadosTM(lerArquivo(camField.getText()));
             tabelaTM.setModel(modelo);
-            //pop = new pesosPopup(4);
-            //popupPesos nova = new popupPesos();
-            //nova.add(pop);
-            //nova.setVisible(true);
-            //teste.updateUI();
-            //teste.setModel(modelo);
-            //System.out.println(lerArquivo(camField.getText()).toString());
+            pop = new pesosPopup(4);
+            pop.setVisible(true);
         } catch (ParseException | IOException ex) {
             Logger.getLogger(Layout.class.getName()).log(Level.SEVERE, null, ex);
         }
