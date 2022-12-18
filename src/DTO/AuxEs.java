@@ -25,6 +25,8 @@ public class AuxEs {
     //lista de MAPEs
     private List<Float> mapeEs;
     //dados de discarte para o mape
+    //vetor que acumula as posições que houve a substituição
+    //seu erro será nulo, e isso tendencia o mape
     private List<Integer> discartEs;
     //soma
     private Float madES;
@@ -106,9 +108,13 @@ public class AuxEs {
         this.mapeES = mapeES;
     }
     
+    public void calculaErro(int index){
+        this.erroEs.add(this.dados.get(index)-this.autoSmoot.get(index));
+    }
+    
     //Equação Exponetial Smooth obs: add null no erro para a logica fazer sentido
     public void formulaES(int index){
-        this.erroEs.add(this.dados.get(index)-this.autoSmoot.get(index));                    
+        this.calculaErro(index);                    
         this.autoSmoot.add(this.autoSmoot.get(index) + Float.parseFloat
                           ("" + this.coefSp * this.erroEs.get(index)));
     }
