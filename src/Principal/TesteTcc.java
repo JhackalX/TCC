@@ -36,7 +36,7 @@ public class TesteTcc {
         //janela.ExibirJanela();
         Layout novo = new Layout();
         //new BarraDeProgresso();
-        novo.show();
+        novo.show(true);
         
         //Bloco de teste
         
