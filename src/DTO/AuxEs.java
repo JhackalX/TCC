@@ -50,8 +50,13 @@ public class AuxEs {
         //valores acumulados      
         this.madES = Float.parseFloat("0");               
         this.maeES = Float.parseFloat("0");                
-        this.mapeES = Float.parseFloat("0");        
-        
+        this.mapeES = Float.parseFloat("0");
+        this.preencherAutoSmooth();
+        this.calculaErro();
+        this.esMAD();
+        this.esMAE();
+        this.esMAPE();
+        this.relatorio();
     }
     
     //Getter e Setter
@@ -111,22 +116,13 @@ public class AuxEs {
         this.mapeES = mapeES;
     }
     
-    public void calculaErro(int index){
-        if(this.autoSmoot.isEmpty() || this.dados.isEmpty()){
-            //mensagem para erro de listagem
-            System.out.println("(AuxEs-void calculoErro):lista de dados ou lista de predicao vazias...");
-        }else{
-            this.erroEs.add(Math.abs(this.dados.get(index)-this.autoSmoot.get(index)));
-        }
+    //------Funções Administrativas entre vetores--------
+    public void relatorio(){
+        System.out.println("-----------------------------------------------");
+        System.out.println("Desvio Absoluto Medio: " + this.esMAD());
+        System.out.println("Erro Absoluto Medio: " + this.esMAE());
+        System.out.println("Erro Absoluto Medio percentual: " + this.esMAPE() + "%%");
     }
-    
-    //Equação Exponetial Smooth obs: add null no erro para a logica fazer sentido
-    public void formulaES(int index){
-        this.autoSmoot.add(this.autoSmoot.get(index-1) + Float.parseFloat
-                          ("" + this.coefSp * (this.dados.get(index-1)-
-                                               this.autoSmoot.get(index-1))));
-    }
-    
     //preenche meu vetor de predicao
     public void preencherAutoSmooth(){
         for(int index = 0; index < this.dados.size(); index++){
@@ -151,59 +147,9 @@ public class AuxEs {
                 }
             }   
         }
+        this.calculaErro();
     }
     
-    //Função de recursão--obs: tem algo errado aqui resolver parcialmente
-    public void dividirConquistar(int index){
-
-        int cont = 0;
-
-        if ((this.dados.get(index) == null) && (index < this.dados.size())){
-            
-            this.autoSmoot.add(this.dados.get(index));
-            index++;
-            this.dividirConquistar(index);
-                
-        }else{
-            if((this.dados.get(index) != null) && (index < this.dados.size())){
-            
-                this.autoSmoot.add(this.dados.get(index));
-                index++;
-                
-                while((this.dados.get(index) != null) && (index < this.dados.size())){
-                    this.formulaES(index-1);
-                    index++;
-                }
-                
-                while((this.dados.get(index) == null) && (cont < 3) && (index < this.dados.size())){
-                    this.formulaES(index-1);
-                    this.trocaValorNull(index);
-                    index++;
-                    cont++;
-                }
-                cont = 0;
-                this.dividirConquistar(index);
-            }else{
-                if(index == this.dados.size()){
-                    System.out.println("Acabou");
-                }
-            }
-        }
-    }
-    
-    //Problemas na area nula do vetor
-    public void gerarARSE(){
-
-        int index = 0;
-        if(this.autoSmoot.isEmpty() == true){
-
-        }else{
-            for(int i = 1; i < this.dados.size(); i++){
-
-            }
-        }
-    }
-    //------Funções Administrativas entre vetores--------
     //Predição-troca o valor nulo pelo valor predito
     public void troca(int index){
         this.dados.remove(index);
@@ -214,42 +160,45 @@ public class AuxEs {
     //verifica se eh possivel trocar valor nulo
     //obedece as regras das 3 substituições
     public boolean trocaValorNull(int index){
-        if(this.subsEs.isEmpty()){
-            return true;
-        }else{
-            //---------------------------------------------------//
-            if(this.subsEs.get(this.subsEs.size()-1) != (index-1)){
-                return true;
+        //---------------------------------------------------//
+        return !(this.subsEs.contains(index-1) && 
+                this.subsEs.contains(index-2) &&
+                this.subsEs.contains(index-3));
+    }
+    
+    //------Funções para calculo-------
+    //calcula o vetor erroES
+    public void calculaErro(){
+        for(int index = 0; index < this.dados.size(); index++){        
+            if(this.autoSmoot.isEmpty() || this.dados.isEmpty()){
+                //mensagem para erro de listagem
+                System.out.println("(AuxEs-void calculoErro):lista de dados ou lista de predicao vazias...");
             }else{
-                if(this.subsEs.size()-2 < 0){
-                    return true;
+                if(this.autoSmoot.get(index) == null && this.dados.get(index) == null){
+                    this.erroEs.add(null);
                 }else{
-                    if(this.subsEs.get(this.subsEs.size()-2) != (index-2)){
-                        return true;
-                    }else{
-                        if(this.subsEs.size()-3 < 0){
-                            return true;
-                        }else{
-                            //checa os ultimos 3 valores------------//
-                            if(this.subsEs.get(this.subsEs.size()-3) != (index-3)){
-                                return true;
-                            }else{
-                                return false;
-                            } 
-                        }
-                    }
+                    this.erroEs.add((this.dados.get(index)-this.autoSmoot.get(index)));
                 }
             }
         }
     }
     
-    //------Funções para calculo-------
+    //Equação Exponetial Smooth obs: add null no erro para a logica fazer sentido
+    public void formulaES(int index){
+        this.autoSmoot.add(this.autoSmoot.get(index-1) + Float.parseFloat
+                          ("" + this.coefSp * (this.dados.get(index-1)-
+                                               this.autoSmoot.get(index-1))));
+    }
+    
     //soma do erro
     public float somaErroABS(){
         float soma;
         soma = 0; 
             for(int i = 0; i < this.erroEs.size(); i++){
-                soma += Math.abs(this.erroEs.get(i));
+                if(this.erroEs.get(i) != null && 
+                   this.subsEs.contains(i)){
+                    soma += Math.abs(this.erroEs.get(i));                
+                }
             }        
         return soma;    
     }
@@ -259,26 +208,46 @@ public class AuxEs {
         float soma;
         soma = 0; 
             for(int i = 0; i < this.erroEs.size(); i++){
-                soma += Math.abs(this.erroEs.get(i)/this.dados.get(i));
+                if(this.erroEs.get(i) != null && 
+                   this.subsEs.contains(i)){
+                    soma += Math.abs(this.erroEs.get(i)/this.dados.get(i));
+                }
             }        
         return soma;    
     }
     
+    //contador de valores nulos
+    public int contNull(List<Float> lista){
+        int qtd = 0;
+        for(int index = 0; index < lista.size(); index++){
+            if(lista.get(index) == null){
+                qtd++;
+            }
+        }
+        return qtd;
+    }
+    
     //Desvio Absoluto Médio
     public String esMAD(){
-        this.madES = (1/this.dados.size())*(this.somaErroABS());    
+        this.madES = (1/(this.erroEs.size()-
+                         this.subsEs.size()-
+                         this.contNull(this.erroEs)))*(this.somaErroABS());    
         return ""+this.madES;    
     }
     
     //Erro Médio Absoluto
     public String esMAE(){
-        this.maeES = (1/this.dados.size())*(this.somaErroABSNormalizada());    
+        this.maeES = (1/(this.erroEs.size()-
+                         this.subsEs.size()-
+                         this.contNull(this.erroEs)))*(this.somaErroABSNormalizada());    
         return ""+this.maeES;    
     }
     
     //Erro Absoluto Médio Percentual
     public String esMAPE(){
-        this.mapeES = (1/this.dados.size())*(this.somaErroABSNormalizada())*100;    
+        this.mapeES = (1/(this.erroEs.size()-
+                          this.subsEs.size()-
+                          this.contNull(this.erroEs)))*(this.somaErroABSNormalizada())*100;    
         return ""+this.mapeES+"%";    
     }
     
