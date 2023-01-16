@@ -10,7 +10,7 @@ import Obj.Model.Info;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
-
+import DTO.AuxEs;
 /**
  *
  * @author jacka
@@ -174,6 +174,21 @@ public class DadosTM extends AbstractTableModel {
     
     public boolean isEmpty(){
         return linhas.isEmpty();
+    }
+  
+    //função para teste
+    public List<Float> getLista(){
+        List<Float> dados = new ArrayList<Float>();
+        for(int index = 0; index < this.linhas.size(); index++){
+            if(this.linhas.get(index).getValor().equals("null")){
+                dados.add(null);
+            }else{
+                dados.add(Float.parseFloat(this.linhas.get(index).getValor()));
+            }
+        }
+        
+        AuxEs met = new AuxEs(dados, 0.9);
+        return dados;
     }
     
 }

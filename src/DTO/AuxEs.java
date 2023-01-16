@@ -122,6 +122,10 @@ public class AuxEs {
         System.out.println("Desvio Absoluto Medio: " + this.esMAD());
         System.out.println("Erro Absoluto Medio: " + this.esMAE());
         System.out.println("Erro Absoluto Medio percentual: " + this.esMAPE() + "%%");
+        System.out.println("QTD substituida: " + this.subsEs.size());
+        System.out.println("Numero de elementos (n): " + (this.autoSmoot.size()-
+                                                          this.subsEs.size()-
+                                                          this.contNull(this.autoSmoot)));
     }
     //preenche meu vetor de predicao
     public void preencherAutoSmooth(){
@@ -196,7 +200,7 @@ public class AuxEs {
         soma = 0; 
             for(int i = 0; i < this.erroEs.size(); i++){
                 if(this.erroEs.get(i) != null && 
-                   this.subsEs.contains(i)){
+                   !this.subsEs.contains(i)){
                     soma += Math.abs(this.erroEs.get(i));                
                 }
             }        
@@ -209,7 +213,7 @@ public class AuxEs {
         soma = 0; 
             for(int i = 0; i < this.erroEs.size(); i++){
                 if(this.erroEs.get(i) != null && 
-                   this.subsEs.contains(i)){
+                   !this.subsEs.contains(i)){
                     soma += Math.abs(this.erroEs.get(i)/this.dados.get(i));
                 }
             }        

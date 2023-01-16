@@ -986,6 +986,7 @@ public class Layout extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    //------------------------------------------------------------------------//    
     public void iniciarVariaveis(){
         avancarB.setVisible(false);
         btImportar.setVisible(false);
@@ -1009,7 +1010,7 @@ public class Layout extends javax.swing.JFrame {
         descricao2SP.setVisible(entrada);
         descricao2TA.setVisible(entrada);      
     }
-    
+
     private void btAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAbrirActionPerformed
        
        JFileChooser arquivo = new JFileChooser();
@@ -1031,8 +1032,9 @@ public class Layout extends javax.swing.JFrame {
         try {
             modelo = new DadosTM(lerArquivo(camField.getText()));
             tabelaTM.setModel(modelo);
-            pop = new pesosPopup(4);
-            pop.setVisible(true);
+            //AuxES met = new AuxES(modelo.getLista(),0.9);
+            //pop = new pesosPopup(4);
+            //pop.setVisible(true);
         } catch (ParseException | IOException ex) {
             Logger.getLogger(Layout.class.getName()).log(Level.SEVERE, null, ex);
         }
