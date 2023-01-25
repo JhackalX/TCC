@@ -4,8 +4,7 @@
  * and open the template in the editor.
  */
 package Ctrl.Interface;
-
-import Obj.Model.Dados;
+import Funcoes.Funcionalidades;
 import Obj.Model.Info;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,25 +16,25 @@ import DTO.AuxEs;
  */
 public class DadosTM extends AbstractTableModel {
     
-    private Info info;
+    //private Info info;
     private String[] colunas;
-    private List<Dados> linhas;
-
+    //private List<Dados> linhas;
+    private List<Object> linhas;
 
     public DadosTM() {
-        this.info = new Info();
-        this.linhas = new ArrayList<Dados>();
+        //this.info = new Info();
+        this.linhas = new ArrayList<Object>();
     }
 
-    public DadosTM(List<Dados> linhas, String[] colunas) {
+    public DadosTM(List<Object> linhas, String[] colunas) {
         this.colunas = colunas;
         this.linhas = linhas;
     }
 
-    public DadosTM(Info info) {
-        this.info = info;
-        this.colunas = info.getColuna();
-        this.linhas = info.getLista();
+    public DadosTM(Object obj) {
+        //this.info = info;
+        this.colunas = Funcionalidades.geraColuna(obj);
+        this.linhas = Funcionalidades.geraListaD(obj);
     }
           
     @Override
@@ -73,15 +72,16 @@ public class DadosTM extends AbstractTableModel {
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         
-        Dados dado = this.linhas.get(rowIndex);
-        
+        //Dados dado = this.linhas.get(rowIndex);
+        List<String> dado = Funcionalidades.getObject(this.linhas, rowIndex);
+                
         switch(columnIndex) {
             case 0:
-                return dado.getDataBr();
+                return dado.get(0);
             case 1:
-                return dado.getPeriodo();
+                return dado.get(1);
             case 2:
-                return dado.getValor().replace('.', ',');
+                return dado.get(2).replace('.', ',');
             default :
                 throw new IndexOutOfBoundsException("columnIndex out of bounds!");
         }  
@@ -90,17 +90,20 @@ public class DadosTM extends AbstractTableModel {
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex){
 
-        Dados dado = this.linhas.get(rowIndex);
-            
+        //Dados dado = this.linhas.get(rowIndex);
+        List<String> dado = Funcionalidades.getObject(this.linhas, rowIndex);
+        
         switch(columnIndex) {
             case 0:
-                dado.setData(aValue.toString());
+                dado.get(0).replaceAll(dado.get(0), aValue.toString());
                 break;
             case 1:
-                dado.setPeriodo(aValue.toString());
+                dado.get(1).replaceAll(dado.get(1), aValue.toString());
+                //dado.setPeriodo(aValue.toString());
                 break;
             case 2:
-                dado.setValor(aValue.toString());//observar as passagens de '.' e ','
+                dado.get(2).replaceAll(dado.get(2), aValue.toString());
+                //dado.setValor(aValue.toString());//observar as passagens de '.' e ','
                 break;
             default :
                 throw new IndexOutOfBoundsException("columnIndex out of bounds!");  
@@ -110,11 +113,14 @@ public class DadosTM extends AbstractTableModel {
 
     public void setValueAt(Object aValue, int rowIndex){
 
-        Dados dado = this.linhas.get(rowIndex);
-                
-        dado.setData(aValue.toString());
-        dado.setPeriodo(aValue.toString());
-        dado.setValor(aValue.toString());
+        //Dados dado = this.linhas.get(rowIndex);
+        List<String> dado = Funcionalidades.getObject(this.linhas, rowIndex);
+        dado.get(0).replaceAll(dado.get(0), aValue.toString());
+        dado.get(1).replaceAll(dado.get(1), aValue.toString());
+        dado.get(2).replaceAll(dado.get(2), aValue.toString());
+        //dado.setData(aValue.toString());
+        //dado.setPeriodo(aValue.toString());
+        //dado.setValor(aValue.toString());
   
         fireTableCellUpdated(rowIndex, 0);
         fireTableCellUpdated(rowIndex, 1);
@@ -126,12 +132,12 @@ public class DadosTM extends AbstractTableModel {
         return false;
     }
     
-    public Dados getDados(int indiceLinha){
+    public Object getDados(int indiceLinha){
         return linhas.get(indiceLinha);
     }
     //mudar pois os dados são adicionados e ordenados automaticamente
-    public void addObj(Dados obj){
-        Dados novo = obj;
+    public void addObj(Object obj){
+        Object novo = obj;
         this.linhas.add(novo);
 
         int ultimoIndice = getRowCount() -1;
@@ -141,18 +147,18 @@ public class DadosTM extends AbstractTableModel {
     }
 
     //mudar pois os dados são adicionados e ordenados automaticamente
-    public void addDados(Info obj){
-        Info info = obj;
-        this.colunas = (info.getColuna());
-        //System.out.println(linhas.toString());
-        //obj.listarMedicao();
-        for(int i = 0; i < info.getLista().size(); i++){
-            //obj.getLista().get(i).toString();
-            this.addObj(info.getLista().get(i));
-            fireTableDataChanged();
-        }
-        //info.listarMedicao();
-    }
+//    public void addDados(Info obj){
+//        Info info = obj;
+//        this.colunas = (info.getColuna());
+//        //System.out.println(linhas.toString());
+//        //obj.listarMedicao();
+//        for(int i = 0; i < info.getLista().size(); i++){
+//            //obj.getLista().get(i).toString();
+//            this.addObj(info.getLista().get(i));
+//            fireTableDataChanged();
+//        }
+//        //info.listarMedicao();
+//    }
     
     public void remove(int indiceLinha){
         this.linhas.remove(indiceLinha);
@@ -160,7 +166,7 @@ public class DadosTM extends AbstractTableModel {
     }
     
     //ainda a testar
-    public void addLista(List<Dados> obj){
+    public void addLista(List<Object> obj){
         int tamanhoAntigo = getRowCount();
         
         this.linhas.addAll(obj);
@@ -175,17 +181,18 @@ public class DadosTM extends AbstractTableModel {
     public boolean isEmpty(){
         return linhas.isEmpty();
     }
-  
+  //=========================================================================//
     //função para teste
     public List<Float> getLista(){
         List<Float> dados = new ArrayList<Float>();
-        for(int index = 0; index < this.linhas.size(); index++){
-            if(this.linhas.get(index).getValor().equals("null")){
+        dados = Funcionalidades.geraLista(linhas);
+        /*for(int index = 0; index < this.linhas.size(); index++){
+            if(this.linhas.get(index).equals("null")){
                 dados.add(null);
             }else{
                 dados.add(Float.parseFloat(this.linhas.get(index).getValor()));
             }
-        }
+        }*/
         
         AuxEs met = new AuxEs(dados, 0.9);
         return dados;

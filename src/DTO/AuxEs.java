@@ -7,7 +7,11 @@ package DTO;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import static DTO.CalculoErro.calculaMAPE;
+import static DTO.CalculoErro.calculaMAD;
+import static DTO.CalculoErro.calculaMAE;
+import static DTO.CalculoErro.somaErroABS;
+import static DTO.CalculoErro.somaErroABSNormalizada;
 /**
  *
  * @author jacka
@@ -22,11 +26,6 @@ public class AuxEs {
     private List<Float> autoSmoot;
     //lista de erros
     private List<Float> erroEs;
-    //lista de MAPEs
-    private List<Float> mapeEs;
-    //dados de discarte para o mape
-
-    private List<Integer> discartEs;
     //vetor que acumula as posições que houve a substituição
     //seu erro será nulo, e isso tendencia o mape
     private List<Integer> subsEs;
@@ -44,8 +43,6 @@ public class AuxEs {
         //listas auxiliares
         this.autoSmoot = new ArrayList<Float>();
         this.erroEs = new ArrayList<Float>();
-        this.mapeEs = new ArrayList<Float>();
-        this.discartEs = new ArrayList<Integer>();
         this.subsEs = new ArrayList<Integer>();
         //valores acumulados      
         this.madES = Float.parseFloat("0");               
@@ -53,9 +50,22 @@ public class AuxEs {
         this.mapeES = Float.parseFloat("0");
         this.preencherAutoSmooth();
         this.calculaErro();
+        //teste-----------------------------------------------------------------
+        System.out.println("-----------------------------------------------");
+        System.out.println(this.autoSmoot);
+        //----------------------------------------------------------------------
+        //teste-----------------------------------------------------------------
+        System.out.println("-----------------------------------------------");
+        System.out.println(this.erroEs);
+        System.out.println("-----------------------------------------------");
+        System.out.println(this.subsEs);
+        //----------------------------------------------------------------------
         this.esMAD();
+        //System.out.println(this.madES);
         this.esMAE();
+        //System.out.println(this.maeES);
         this.esMAPE();
+        //System.out.println(this.esMAPE());
         this.relatorio();
     }
     
@@ -84,49 +94,42 @@ public class AuxEs {
         this.erroEs = erroEs;
     }
 
-    public List<Float> getMapeEs() {
-        return mapeEs;
+    public String getMadES() {
+        return ""+madES;
     }
 
-    public void setMapeEs(List<Float> mapeEs) {
-        this.mapeEs = mapeEs;
+    public void setMadES(String madES) {
+        this.madES = Float.parseFloat(madES);
     }
 
-    public Float getMadES() {
-        return madES;
+    public String getMaeES() {
+        return ""+maeES;
     }
 
-    public void setMadES(Float madES) {
-        this.madES = madES;
+    public void setMaeES(String maeES) {
+        this.maeES = Float.parseFloat(maeES);
     }
 
-    public Float getMaeES() {
-        return maeES;
+    public String getMapeES() {
+        return ""+mapeES;
     }
 
-    public void setMaeES(Float maeES) {
-        this.maeES = maeES;
-    }
-
-    public Float getMapeES() {
-        return mapeES;
-    }
-
-    public void setMapeES(Float mapeES) {
-        this.mapeES = mapeES;
+    public void setMapeES(String mapeES) {
+        this.mapeES = Float.parseFloat(mapeES);
     }
     
     //------Funções Administrativas entre vetores--------
     public void relatorio(){
         System.out.println("-----------------------------------------------");
-        System.out.println("Desvio Absoluto Medio: " + this.esMAD());
-        System.out.println("Erro Absoluto Medio: " + this.esMAE());
-        System.out.println("Erro Absoluto Medio percentual: " + this.esMAPE() + "%%");
+        System.out.println("Desvio Absoluto Medio: " + this.getMadES());
+        System.out.println("Erro Absoluto Medio: " + this.getMaeES());
+        System.out.println("Erro Absoluto Medio percentual: " + this.getMapeES() + "%");
         System.out.println("QTD substituida: " + this.subsEs.size());
         System.out.println("Numero de elementos (n): " + (this.autoSmoot.size()-
                                                           this.subsEs.size()-
                                                           this.contNull(this.autoSmoot)));
     }
+    
     //preenche meu vetor de predicao
     public void preencherAutoSmooth(){
         for(int index = 0; index < this.dados.size(); index++){
@@ -141,7 +144,6 @@ public class AuxEs {
                         if(this.trocaValorNull(index) == true){
                             this.formulaES(index);
                             this.troca(index);
-                            this.subsEs.add(index);
                         }else{
                             this.autoSmoot.add(this.dados.get(index));
                         }
@@ -151,17 +153,16 @@ public class AuxEs {
                 }
             }   
         }
-        this.calculaErro();
     }
     
-    //Predição-troca o valor nulo pelo valor predito
+    //Predição-troca o valor null pelo valor predito
     public void troca(int index){
         this.dados.remove(index);
         this.dados.add(index, this.autoSmoot.get(index));
         this.subsEs.add(index);
     }
     
-    //verifica se eh possivel trocar valor nulo
+    //verifica se eh possivel trocar valor null
     //obedece as regras das 3 substituições
     public boolean trocaValorNull(int index){
         //---------------------------------------------------//
@@ -194,33 +195,7 @@ public class AuxEs {
                                                this.autoSmoot.get(index-1))));
     }
     
-    //soma do erro
-    public float somaErroABS(){
-        float soma;
-        soma = 0; 
-            for(int i = 0; i < this.erroEs.size(); i++){
-                if(this.erroEs.get(i) != null && 
-                   !this.subsEs.contains(i)){
-                    soma += Math.abs(this.erroEs.get(i));                
-                }
-            }        
-        return soma;    
-    }
-    
-    //soma do erro normalizado
-    public float somaErroABSNormalizada(){
-        float soma;
-        soma = 0; 
-            for(int i = 0; i < this.erroEs.size(); i++){
-                if(this.erroEs.get(i) != null && 
-                   !this.subsEs.contains(i)){
-                    soma += Math.abs(this.erroEs.get(i)/this.dados.get(i));
-                }
-            }        
-        return soma;    
-    }
-    
-    //contador de valores nulos
+    //contador de valores nulls
     public int contNull(List<Float> lista){
         int qtd = 0;
         for(int index = 0; index < lista.size(); index++){
@@ -232,27 +207,30 @@ public class AuxEs {
     }
     
     //Desvio Absoluto Médio
-    public String esMAD(){
-        this.madES = (1/(this.erroEs.size()-
-                         this.subsEs.size()-
-                         this.contNull(this.erroEs)))*(this.somaErroABS());    
-        return ""+this.madES;    
+    public void esMAD(){
+        float abs = somaErroABS(this.erroEs, this.subsEs);
+        int cont = this.contNull(this.autoSmoot);
+        float mad = calculaMAD(abs, 
+                            this.erroEs.size(), 
+                            this.subsEs.size(), 
+                            cont);
+        this.setMadES(""+mad);
     }
     
     //Erro Médio Absoluto
-    public String esMAE(){
-        this.maeES = (1/(this.erroEs.size()-
-                         this.subsEs.size()-
-                         this.contNull(this.erroEs)))*(this.somaErroABSNormalizada());    
-        return ""+this.maeES;    
+    public void esMAE(){
+        float absn = somaErroABSNormalizada(this.dados, this.erroEs, this.subsEs);
+        int cont = this.contNull(this.autoSmoot);
+        float mae = calculaMAE(absn, 
+                            this.erroEs.size(), 
+                            this.subsEs.size(), 
+                            cont);
+        this.setMaeES(""+mae);
     }
     
     //Erro Absoluto Médio Percentual
-    public String esMAPE(){
-        this.mapeES = (1/(this.erroEs.size()-
-                          this.subsEs.size()-
-                          this.contNull(this.erroEs)))*(this.somaErroABSNormalizada())*100;    
-        return ""+this.mapeES+"%";    
+    public void esMAPE(){
+        this.setMapeES(calculaMAPE(this.getMaeES()).toString());        
     }
     
 }

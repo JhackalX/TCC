@@ -310,13 +310,11 @@ public class Info {
                 this.lista.add(lista.get(i));
                 //this.ordenarLista();
                 
-                //this.atualizarIntervaloData();
-                
+                //this.atualizarIntervaloData();            
             }else{
                 System.out.println("elemento ja existe na lista...");
             }
         }
-        
         this.atualizarIntervaloData();
     }
     
@@ -346,8 +344,7 @@ public class Info {
             if(this.getDado(i).getValor().equals("null")){
                 this.lista.remove(i);
             }
-        }
-        
+        } 
         this.atualizarIntervaloData();
     }
 
@@ -358,8 +355,7 @@ public class Info {
             if(!this.getDado(i).getValor().equals("null")){
                 dados.add(Float.parseFloat(lista.get(i).getValor()));
             }
-        }
-        
+        }       
         return dados;
     }
     
@@ -372,8 +368,7 @@ public class Info {
                (this.getDado(i).getMonth() == mes)){
                 this.lista.remove(i);
             }
-        }
-        
+        }  
         this.atualizarIntervaloData();
     }
     
@@ -386,7 +381,6 @@ public class Info {
                 this.lista.remove(i);
             }
         }
-
         this.atualizarIntervaloData();
     }
 
@@ -396,7 +390,6 @@ public class Info {
                 this.lista.remove(i);
             }
         }
-
         this.atualizarIntervaloData();
     }
     

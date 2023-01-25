@@ -165,10 +165,7 @@ public class Dados implements Comparable<Dados> {
                             ", hora: " + periodo + 
                             ", temperatura: " + this.getValor() + '}';
     }
-    
-    //funções práticas de lista
-    
-    
+      
     //funções práticas de objeto
     
     public void limpar(){

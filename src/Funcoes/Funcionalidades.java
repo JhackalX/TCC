@@ -14,7 +14,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 
@@ -85,26 +87,16 @@ public class Funcionalidades {
     public static Info lerArquivo(String path) throws FileNotFoundException, ParseException, IOException{
         try(BufferedReader ler = new BufferedReader(new FileReader(path))){
            
-            //System.out.println("entrou aqui!!!");
             String line = ler.readLine();
             Info topo = new Info();
-            //System.out.println("entrou aqui!!!");
             addCabecalho(line, topo);
             line = ler.readLine();
-            //System.out.println("entrou aqui!!!");
-
             while(line != null){
                 addDados(line, topo);
-                line = ler.readLine();
-
-                //System.out.println(line);
-                
-                
+                line = ler.readLine();    
             }
-            //System.out.println(relatorio(topo));
             Validacao o = new Validacao(topo.dadosPValidar());
             JOptionPane.showMessageDialog(null, "Leitura Completa!");
-            //System.out.println(topo.toString());
             return topo;
         }catch(IOException e){
             System.out.println("Funcoes.Funcionalidades.lerArquivo()");
@@ -122,6 +114,7 @@ public class Funcionalidades {
 
         //System.out.println("periodicidade de medicao");        
     }
+    
     public static void addDados (String linha, Info cidade) throws ParseException{
         //System.out.println(linha);
         String[] campos = linha.trim().split(";");
@@ -138,6 +131,49 @@ public class Funcionalidades {
 
         cidade.adicionarMedicao(dado);
         //System.out.println("periodicidade de medicao");
+    }
+    
+//Dados-------------------------------------------------------------------------
+    public static List<Float> geraLista(List<Object> lista){
+        List<Float> valores = new ArrayList<Float>();
+        for(int index = 0; index < lista.size(); index++){
+            if(((Dados)lista.get(index)).getValor().equals("null")){
+                valores.add(null);
+            }else{
+                valores.add(Float.parseFloat(((Dados)lista.get(index)).getValor()));
+            }
+        }
+        return valores;
     }    
+    
+    public static void atualizaDados(List<Object> lista, List<Float> valores){
+        for(int index = 0; index < lista.size(); index++){
+            if(!((Dados)lista.get(index)).getValor().equals(""+valores.get(index))){
+                ((Dados)lista.get(index)).setValor(valores.get(index));
+            }
+        }
+    }
+
+    public static List<String> getObject(List<Object> lista, int index){
+        
+        List<String> obj = new ArrayList<String>();
+        obj.add(((Dados)lista.get(index)).getDataBr());
+        obj.add(""+((Dados)lista.get(index)).getPeriodo());
+        obj.add(((Dados)lista.get(index)).getValor().replace('.', ','));        
+        return obj;
+    }
+    
+//INFO--------------------------------------------------------------------------    
+    public static List<Object> geraListaD(Object objeto){
+        List<Object> valores = new ArrayList<Object>();
+        valores.addAll(((Info)(objeto)).getLista());
+        return valores;
+    }
+    
+    public static String[] geraColuna(Object objeto){
+        String[] coluna;
+        coluna = ((Info)(objeto)).getColuna();
+        return coluna;
+    }
     
 }

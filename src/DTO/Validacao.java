@@ -195,11 +195,12 @@ public class Validacao {
     
     //checa se a serie é estacionaria
     public boolean isEstacionaria(){
-    if(this.coefSp >= 0){
-        return false;
-    }else{
-        return true;
-        }  
+        return !(this.coefSp >= 0);
+//    if(this.coefSp >= 0){
+//        return false;
+//    }else{
+//        return true;
+//        }  
     }
        
     public String Resultado(){
