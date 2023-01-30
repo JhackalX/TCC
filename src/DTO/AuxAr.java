@@ -30,6 +30,7 @@ public class AuxAr {
     //vetor que acumula as posições que houve a substituição
     //seu erro será nulo, e isso tendencia o mape
     private List<Integer> subsAr; 
+    private List<Integer> copiaAr;
     //soma
     private Float madAR;
     private Float maeAR;
@@ -42,6 +43,7 @@ public class AuxAr {
         this.autoAr =  new ArrayList<Float>();
         this.erroAr =  new ArrayList<Float>();
         this.subsAr = new ArrayList<Integer>();
+        this.copiaAr = new ArrayList<Integer>();
         //valores acumulados  
         this.madAR = Float.parseFloat("0");
         this.maeAR = Float.parseFloat("0");
@@ -51,12 +53,17 @@ public class AuxAr {
         //teste-----------------------------------------------------------------
         System.out.println("-----------------------------------------------");
         System.out.println(this.autoAr);
+        System.out.println("-----------------------------------------------");
+        System.out.println(this.dados);
         //----------------------------------------------------------------------
         //teste-----------------------------------------------------------------
+        this.relatAnalise();
         System.out.println("-----------------------------------------------");
         System.out.println(this.erroAr);
         System.out.println("-----------------------------------------------");
         System.out.println(this.subsAr);
+        System.out.println("-----------------------------------------------");
+        System.out.println(this.copiaAr);
         //----------------------------------------------------------------------
         this.arMAD();
         //System.out.println(this.madAR);
@@ -131,26 +138,66 @@ public class AuxAr {
         System.out.println("Erro Absoluto Medio: " + this.getMaeAR());
         System.out.println("Erro Absoluto Medio percentual: " + this.getMapeAR() + "%");
         System.out.println("QTD substituida: " + this.subsAr.size());
+        System.out.println("QTD copiada: " + this.copiaAr.size());
         System.out.println("Numero de elementos (n): " + (this.autoAr.size()-
+                                                          this.copiaAr.size()-
                                                           this.subsAr.size()-
                                                           this.contNull(this.autoAr)));
     }
-
+    
+    //função para teste
+    private void relatAnalise(){
+        System.out.println("-----------------------------------------------");
+        System.out.println("lista de Dados:");
+        System.out.println("-----------------------------------------------");
+        for (int i = 0; i < this.dados.size(); i++) {
+            if(//(this.dados.get(i).compareTo(Float.parseFloat("0")) == 0) || 
+                this.dados.get(i) == null){
+                System.out.println("index: "+(i+2)+"|--| valor: "+this.dados.get(i));
+            }
+        }
+        System.out.println("-----------------------------------------------");
+        System.out.println("lista de AR:");
+        System.out.println("-----------------------------------------------");
+        for (int o = 0; o < this.autoAr.size(); o++) {
+            if(//(this.autoAr.get(o).compareTo(Float.parseFloat("0")) == 0) || 
+               this.autoAr.get(o) == null){
+                System.out.println("index: "+(o+2)+"|--| valor: "+this.autoAr.get(o));
+            }
+        }
+        System.out.println("-----------------------------------------------");
+        System.out.println("lista de Erro:");
+        System.out.println("-----------------------------------------------");
+        for (int u = 0; u < this.erroAr.size(); u++) {
+            if(//(this.erroAr.get(u).compareTo(Float.parseFloat("0")) == 0) || 
+               this.erroAr.get(u) == null){
+                System.out.println("index: "+(u+2)+"|--| valor: "+this.erroAr.get(u));
+            }
+        }
+        System.out.println("-----------------------------------------------");
+    }
+    
     private void preencherAutoAR() {
         for(int index = 0; index < this.dados.size(); index++){
             if(this.autoAr.isEmpty() || 
-               !this.checkCadeia(this.pesos.size(), index) || 
-               !this.trocaValorNull(index)){
+               !this.checkCadeia(index-1)){
                 this.autoAr.add(this.dados.get(index));
-                
+                this.copiaAr.add(index);
             }else{
-                if(this.checkCadeia(this.pesos.size(), index) &&
-                   this.trocaValorNull(index) &&
+                if(this.checkCadeia(index-1) &&
+         //          this.trocaValorNull(index) &&
                    (this.dados.get(index) != null)){
-                    this.formulaAR(index);                    
+                    this.formulaAR(index-1);                    
                 }else{
-                    this.formulaAR(index);
-                    this.troca(index);
+                    if((this.dados.get(index) == null) &&
+                        this.checkCadeia(index-1) &&
+                        this.trocaValorNull(index)){
+                        this.formulaAR(index-1);
+                        this.troca(index);                        
+                    }else{
+                        this.autoAr.add(this.dados.get(index));
+                        this.subsAr.add(index);
+                    }
                 }
             }  
         }
@@ -174,11 +221,11 @@ public class AuxAr {
 
     //verifica se existe valor null na cadeia de valores 
     //na formula arima de pesos
-    private boolean checkCadeia(int tam, int inicial) {
-        if((inicial - tam) < 0){
+    private boolean checkCadeia(int inicial) {
+        if((this.autoAr.size() - this.pesos.size()) < 0){
             return false;
         }
-        for (int index = 0; index <= tam; index++ ){
+        for (int index = 0; index < this.pesos.size(); index++ ){
             if(this.dados.get(inicial - index) == null){
                 return false;
             }
@@ -194,7 +241,10 @@ public class AuxAr {
                 //mensagem para erro de listagem
                 System.out.println("(AuxAr-void calculoErro):lista de dados ou lista de predicao vazias...");
             }else{
-                if(this.autoAr.get(index) == null && this.dados.get(index) == null){
+                if((this.autoAr.get(index) == null || 
+                    this.dados.get(index) == null) || 
+                    (this.copiaAr.contains(index) ||
+                     this.subsAr.contains(index))){
                     this.erroAr.add(null);
                 }else{
                     this.erroAr.add((this.dados.get(index)-this.autoAr.get(index)));
@@ -207,7 +257,7 @@ public class AuxAr {
     private void formulaAR(int index) {
         float soma = 0;
         for(int pos = 0; pos < this.pesos.size(); pos++){
-            soma += this.dados.get(index + pos)*this.pesos.get(pos);
+            soma += this.dados.get(index - pos)*this.pesos.get(pos);
         }
         this.autoAr.add(soma);
     }
@@ -229,7 +279,7 @@ public class AuxAr {
         int cont = this.contNull(this.autoAr);
         float mad = calculaMAD(abs, 
                             this.erroAr.size(), 
-                            this.subsAr.size(), 
+                            (this.subsAr.size()+this.copiaAr.size()), 
                             cont);
         this.setMadAR(""+mad);    
     }
@@ -240,7 +290,7 @@ public class AuxAr {
         int cont = this.contNull(this.autoAr);
         float mae = calculaMAE(absn, 
                             this.erroAr.size(), 
-                            this.subsAr.size(), 
+                            (this.subsAr.size()+this.copiaAr.size()), 
                             cont);
         this.setMaeAR(""+mae);
     }

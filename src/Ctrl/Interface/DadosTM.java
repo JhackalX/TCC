@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package Ctrl.Interface;
+import DTO.AuxAr;
 import Funcoes.Funcionalidades;
 import Obj.Model.Info;
 import java.util.ArrayList;
@@ -193,8 +194,11 @@ public class DadosTM extends AbstractTableModel {
                 dados.add(Float.parseFloat(this.linhas.get(index).getValor()));
             }
         }*/
-        
-        AuxEs met = new AuxEs(dados, 0.9);
+        List<Float> pesos = new ArrayList<Float>();
+        pesos.add(Float.parseFloat("0.5")); 
+        pesos.add(Float.parseFloat("0.3"));
+        pesos.add(Float.parseFloat("0.2"));
+        AuxAr met = new AuxAr(pesos, dados);
         return dados;
     }
     
