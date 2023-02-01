@@ -195,9 +195,12 @@ public class DadosTM extends AbstractTableModel {
             }
         }*/
         List<Float> pesos = new ArrayList<Float>();
-        pesos.add(Float.parseFloat("0.5")); 
-        pesos.add(Float.parseFloat("0.3"));
+        pesos.add(Float.parseFloat("0.30")); 
+        pesos.add(Float.parseFloat("0.25"));
         pesos.add(Float.parseFloat("0.2"));
+        pesos.add(Float.parseFloat("0.15")); 
+        pesos.add(Float.parseFloat("0.09"));
+        pesos.add(Float.parseFloat("0.01"));
         AuxAr met = new AuxAr(pesos, dados);
         return dados;
     }

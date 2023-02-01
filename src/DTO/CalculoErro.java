@@ -47,16 +47,16 @@ public class CalculoErro {
     public static Float calculaMAD(float somaErroABS, 
                             int erroQTD, 
                             int subQTD, 
-                            int nullQTD){
-        return ((float)((somaErroABS)/(erroQTD - subQTD - nullQTD)));        
+                            int copiaQTD){
+        return ((float)((somaErroABS)/(erroQTD - subQTD - copiaQTD)));        
     }
     
     //Erro Médio Absoluto
     public static Float calculaMAE(float somaErroABSNormalizada, 
                             int erroQTD, 
                             int subQTD, 
-                            int nullQTD){
-        return ((float)((somaErroABSNormalizada)/(erroQTD - subQTD - nullQTD)));        
+                            int copiaQTD){
+        return ((float)((somaErroABSNormalizada)/(erroQTD - subQTD - copiaQTD)));        
     }
     
     //Erro Absoluto Médio Percentual

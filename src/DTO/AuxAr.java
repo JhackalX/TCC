@@ -61,9 +61,9 @@ public class AuxAr {
         System.out.println("-----------------------------------------------");
         System.out.println(this.erroAr);
         System.out.println("-----------------------------------------------");
-        System.out.println(this.subsAr);
+        System.out.println("Vetor de substituições: "+this.subsAr);
         System.out.println("-----------------------------------------------");
-        System.out.println(this.copiaAr);
+        System.out.println("vetor de copias de valores: "+this.copiaAr);
         //----------------------------------------------------------------------
         this.arMAD();
         //System.out.println(this.madAR);
@@ -139,10 +139,9 @@ public class AuxAr {
         System.out.println("Erro Absoluto Medio percentual: " + this.getMapeAR() + "%");
         System.out.println("QTD substituida: " + this.subsAr.size());
         System.out.println("QTD copiada: " + this.copiaAr.size());
-        System.out.println("Numero de elementos (n): " + (this.autoAr.size()-
+        System.out.println("Numero de elementos (n): " + (this.erroAr.size()-
                                                           this.copiaAr.size()-
-                                                          this.subsAr.size()-
-                                                          this.contNull(this.autoAr)));
+                                                          this.subsAr.size()));
     }
     
     //função para teste
@@ -196,7 +195,7 @@ public class AuxAr {
                         this.troca(index);                        
                     }else{
                         this.autoAr.add(this.dados.get(index));
-                        this.subsAr.add(index);
+                        this.copiaAr.add(index);
                     }
                 }
             }  
@@ -247,7 +246,8 @@ public class AuxAr {
                      this.subsAr.contains(index))){
                     this.erroAr.add(null);
                 }else{
-                    this.erroAr.add((this.dados.get(index)-this.autoAr.get(index)));
+                    this.erroAr.add((this.dados.get(index)-
+                                     this.autoAr.get(index)));
                 }
             }
         }    
@@ -276,22 +276,24 @@ public class AuxAr {
     //Desvio Absoluto Médio
     private void arMAD() {
         float abs = somaErroABS(this.erroAr, this.subsAr);
-        int cont = this.contNull(this.autoAr);
+        //int cont = this.contNull(this.autoAr);
         float mad = calculaMAD(abs, 
                             this.erroAr.size(), 
-                            (this.subsAr.size()+this.copiaAr.size()), 
-                            cont);
+                             this.subsAr.size(), 
+                            this.copiaAr.size());
         this.setMadAR(""+mad);    
     }
 
     //Erro Médio Absoluto
     private void arMAE() {
-       float absn = somaErroABSNormalizada(this.dados, this.erroAr, this.subsAr);
-        int cont = this.contNull(this.autoAr);
+       float absn = somaErroABSNormalizada(this.dados, 
+                                            this.erroAr,
+                                            this.subsAr);
+        //int cont = this.contNull(this.autoAr);
         float mae = calculaMAE(absn, 
                             this.erroAr.size(), 
-                            (this.subsAr.size()+this.copiaAr.size()), 
-                            cont);
+                             this.subsAr.size(), 
+                            this.copiaAr.size());
         this.setMaeAR(""+mae);
     }
 
