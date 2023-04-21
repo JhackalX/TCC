@@ -6,7 +6,6 @@
 package Ctrl.Interface;
 
 import Ctrl.Geral.CtrlGeral;
-import Interface.Layout;
 import javax.swing.JFrame;
 
 /**
@@ -15,7 +14,7 @@ import javax.swing.JFrame;
  */
 public class CtrlInterface {
     
-    private Layout tela;
+//    private Layout tela;
     private CtrlGeral principal;
     private CtrlGeral gerDominio;
 
@@ -26,20 +25,20 @@ public class CtrlInterface {
     
     public void ExibirJanela(){
         JFrame.setDefaultLookAndFeelDecorated(true);
-        tela = new Layout();
-        tela.setVisible(true);
+//        tela = new Layout();
+//        tela.setVisible(true);
     }
     
     public void InicializarComponente(){
-        tela.iniciarVariaveis();
+//        tela.iniciarVariaveis();
     }
 
     public void DescricaoArVisible(boolean entrada){
-        tela.mostrarDescricaoAr(entrada);
+//        tela.mostrarDescricaoAr(entrada);
     }
     
     public void DescricaoESVisible(boolean entrada){
-        tela.mostrarDescricaoEs(entrada);
+//        tela.mostrarDescricaoEs(entrada);
     }
     
     

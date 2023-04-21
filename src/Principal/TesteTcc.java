@@ -6,20 +6,8 @@
 package Principal;
 
 
-import Ctrl.Interface.CtrlInterface;
-import Interface.Layout;
-import Obj.Model.Info;
-import Obj.Model.Dados;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-
-
-
-
-
-
-
+import Interface.WindowDecorator;
+import javax.swing.JFrame;
 
 /**
  *
@@ -32,21 +20,9 @@ public class TesteTcc {
      */
     public static void main(String[] args){
         
-        //CtrlInterface janela = new CtrlInterface();
-        //janela.ExibirJanela();
-        Layout novo = new Layout();
-        //new BarraDeProgresso();
-        novo.show(true);
-        
-        //Bloco de teste
-        
-        //teste();
-        
-        
-        //System.exit(0);
-        
-        
-        
+        JFrame janela = new JFrame();     
+        WindowDecorator teste = Interface.WindowDecorator.decorator(janela);
+        janela.show();        
 
     }
     
