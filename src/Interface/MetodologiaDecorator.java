@@ -4,19 +4,25 @@
  */
 package Interface;
 
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseEvent;
 import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
 
 /**
  *
@@ -224,22 +230,19 @@ public class MetodologiaDecorator {
                                                                                                 new java.awt.Font("Tahoma", 1, 12))); // NOI18N
         this.jScrollPaneDetalhes.setViewportView(this.jTextAreaDetalhes);        
         
-    }
-    
-    private void configureStatus(){
-    }
+    }    
     
     private void configureBtns(){
         this.avancarBtn.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         this.avancarBtn.setText("Avançar");
+        this.avancarBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                avancarBtnActionPerformed(evt);
+            }
+        });
 
         this.retornarBtn.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         this.retornarBtn.setText("Retornar");
-    }
-    
-    private void configureFundo(){
-        
-        
     }
     
     private void panelDetalhes(){
@@ -419,12 +422,58 @@ public class MetodologiaDecorator {
         this.jTextFieldnPesos.setVisible(entrada);
         this.jScrollPaneDescricao1.setVisible(entrada);       
         this.jTextAreaDescricao1.setVisible(entrada);
+        
+        ((AbstractDocument) jTextFieldnPesos.getDocument()).setDocumentFilter(new DocumentFilter() {
+            @Override
+            public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs)
+                                throws BadLocationException {
+                String newText = text.replaceAll("[^0-9]", "");
+                super.replace(fb, offset, length, newText, attrs);
+            }
+        });        
     }
 
     private void mostrarDescricaoEs(boolean entrada) {
         this.jLabelOpcao2.setVisible(entrada);
         this.jTextFieldcoef.setVisible(entrada);
         this.jScrollPaneDescricao2.setVisible(entrada);
-        this.jTextAreaDescricao2.setVisible(entrada); 
+        this.jTextAreaDescricao2.setVisible(entrada);
+        
+        // cria o DocumentFilter para permitir apenas números float entre 0 e 1
+        ((AbstractDocument) jTextFieldcoef.getDocument()).setDocumentFilter(new DocumentFilter() {
+            @Override
+            public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs)
+                throws BadLocationException {
+                // Remove caracteres não numéricos
+                String newText = text.replaceAll("[^0-9\\.]", "");
+                String fullText = fb.getDocument().getText(0, fb.getDocument().getLength()) + newText;
+
+                // Converte o valor para float e verifica se está dentro do intervalo 0 a 1
+                float value = Float.parseFloat(fullText);
+                if (value < 0 || value >= 1) {
+                  return;
+                }
+
+                // Chama o método replace da classe pai para inserir o novo valor no JTextField
+                super.replace(fb, offset, length, newText, attrs);
+            }
+        });        
     }
+    
+    private void avancarBtnActionPerformed(ActionEvent evt) {
+        JFrame janela = new JFrame();
+        PopupDecorator popup = new PopupDecorator();
+        JScrollPane jScrollPanePopup = new JScrollPane();
+        
+        janela.setSize(447,312);
+        janela.setDefaultCloseOperation(janela.EXIT_ON_CLOSE);
+        janela.setVisible(true);
+        janela.setLayout(new BorderLayout());
+        
+        jScrollPanePopup.setViewportView(popup.PopupReady(Integer.parseInt(this.jTextFieldnPesos.getText()), janela));
+        
+        janela.add(jScrollPanePopup);
+        janela.repaint();
+        janela.show();
+    }      
 }

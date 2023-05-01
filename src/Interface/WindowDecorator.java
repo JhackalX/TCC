@@ -24,12 +24,16 @@ public class WindowDecorator {
     private JTabbedPane painelTab;
     
     private JPanel inicio;
+    private JPanel recuperar;
+    private JPanel importar;
     private JPanel visaoGeral;
     private JPanel metodologias;
     private JPanel visaoAuxiliar;
     private JPanel resultados;
 
     private JScrollPane jScrollPaneInicio;
+    private JScrollPane jScrollPaneRecuperar;
+    private JScrollPane jScrollPaneImportar;
     private JScrollPane jScrollPaneVisaoGeral;
     private JScrollPane jScrollPaneMetodologias;
     private JScrollPane jScrollPaneVisaoAuxiliar;
@@ -66,6 +70,8 @@ public class WindowDecorator {
     private void initAbas(){
 
         this.montarInicio();
+        this.montarRecuperar();
+        this.montarImportar();
         this.montarVisaoGeral();
         this.montarMetodologias();
         this.montarVisaoAuxiliar();
@@ -79,12 +85,16 @@ public class WindowDecorator {
         this.painelTab = new JTabbedPane();
        
         this.inicio = new JPanel(new BorderLayout());
+        this.recuperar = new JPanel(new BorderLayout());
+        this.importar = new JPanel(new BorderLayout());
         this.visaoGeral = new JPanel(new BorderLayout());
         this.metodologias = new JPanel(new BorderLayout());
         this.visaoAuxiliar = new JPanel(new BorderLayout());
         this.resultados = new JPanel(new BorderLayout());
 
         this.jScrollPaneInicio = new JScrollPane();
+        this.jScrollPaneRecuperar = new JScrollPane();
+        this.jScrollPaneImportar = new JScrollPane();
         this.jScrollPaneVisaoGeral = new JScrollPane();
         this.jScrollPaneMetodologias = new JScrollPane();
         this.jScrollPaneVisaoAuxiliar = new JScrollPane();
@@ -112,7 +122,7 @@ public class WindowDecorator {
     }
 
     //construção de cada aba----------------------------------------------------    
-    private void montarInicio(){
+    private void montarInicio() {
         InicioDecorator inicio = new InicioDecorator();
         JPanel jPanelInicio = inicio.InicioReady();
 
@@ -135,6 +145,56 @@ public class WindowDecorator {
                               Short.MAX_VALUE)
         );        
         this.painelTab.add("Inicio", this.inicio);
+    }
+
+    private void montarRecuperar() {
+        RecuperarDecorator recuperar = new RecuperarDecorator();
+        JPanel jPanelRecuperar = recuperar.RecuperarReady();
+
+        GroupLayout recuperarLayout = new GroupLayout(this.recuperar);
+        this.recuperar.setLayout(recuperarLayout);
+        this.jScrollPaneRecuperar.setViewportView(jPanelRecuperar);
+        
+        recuperarLayout.setHorizontalGroup(
+            recuperarLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addComponent(this.jScrollPaneRecuperar, 
+                              GroupLayout.DEFAULT_SIZE, 
+                              GroupLayout.DEFAULT_SIZE, 
+                              Short.MAX_VALUE)
+        );
+        recuperarLayout.setVerticalGroup(
+            recuperarLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addComponent(this.jScrollPaneRecuperar, 
+                              GroupLayout.DEFAULT_SIZE, 
+                              GroupLayout.DEFAULT_SIZE, 
+                              Short.MAX_VALUE)
+        );        
+        this.painelTab.add("Recuperar", this.recuperar);        
+    }
+    
+    private void montarImportar(){
+        ImportarDecorator importar = new ImportarDecorator();
+        JPanel jPanelImportar = importar.ImportarReady();
+
+        GroupLayout importarLayout = new GroupLayout(this.importar);
+        this.importar.setLayout(importarLayout);
+        
+        
+        importarLayout.setHorizontalGroup(
+            importarLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addComponent(jPanelImportar, 
+                              GroupLayout.DEFAULT_SIZE, 
+                              GroupLayout.DEFAULT_SIZE, 
+                              Short.MAX_VALUE)
+        );
+        importarLayout.setVerticalGroup(
+            importarLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addComponent(jPanelImportar, 
+                              GroupLayout.DEFAULT_SIZE, 
+                              GroupLayout.DEFAULT_SIZE, 
+                              Short.MAX_VALUE)
+        );        
+        this.painelTab.add("Importar", this.importar);
     }
     
     private void montarVisaoGeral(){
@@ -215,9 +275,28 @@ public class WindowDecorator {
     }
     
     private void montarResultados(){
-        this.resultados = new JPanel();
-        this.resultados.add(new JLabel("Resultados"));
-        this.resultados.repaint();
+        
+        ResultadosDecorator resultados = new ResultadosDecorator();
+        JPanel jPanelResultados = resultados.ResultadoReady();
+        
+        GroupLayout resultadoLayout = new GroupLayout(this.resultados);
+        this.resultados.setLayout(resultadoLayout);
+        this.jScrollPaneResultados.setViewportView(this.resultados);
+        
+        resultadoLayout.setHorizontalGroup(
+            resultadoLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addComponent(jPanelResultados, 
+                              GroupLayout.DEFAULT_SIZE, 
+                              GroupLayout.DEFAULT_SIZE, 
+                              Short.MAX_VALUE)
+        );
+        resultadoLayout.setVerticalGroup(
+            resultadoLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addComponent(jPanelResultados, 
+                              GroupLayout.DEFAULT_SIZE, 
+                              GroupLayout.DEFAULT_SIZE, 
+                              Short.MAX_VALUE)
+        );
         this.painelTab.add("Resultados", this.resultados);
     }
 }
