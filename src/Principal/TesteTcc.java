@@ -6,8 +6,7 @@
 package Principal;
 
 
-import Interface.WindowDecorator;
-import javax.swing.JFrame;
+import Ctrl.Interface.CtrlInterface;
 
 /**
  *
@@ -20,9 +19,9 @@ public class TesteTcc {
      */
     public static void main(String[] args){
         
-        JFrame janela = new JFrame();     
-        WindowDecorator teste = Interface.WindowDecorator.decorator(janela);
-        janela.show();        
+        CtrlInterface Ctrl = CtrlInterface.ctrlInterface();
+        Ctrl.ExibirJanela();
+        
 
     }
     

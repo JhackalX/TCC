@@ -8,6 +8,7 @@ import Ctrl.Interface.DadosTM;
 import static Funcoes.Funcionalidades.lerArquivo;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
@@ -22,6 +23,7 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle;
@@ -71,16 +73,17 @@ public class ImportarDecorator {
     private JScrollPane jScrollPaneAjuda;
     private JTextArea jTextAreaAjuda;
     
+    private JTabbedPane painelTab;    
     private DadosTM modelo;
     
-    public ImportarDecorator() {
+    public ImportarDecorator(JTabbedPane tab) {
                
-        this.initComponets();
+        this.initComponets(tab);
         this.configureInfoTextFields();
         
     }
     
-    public void initComponets(){
+    public void initComponets(JTabbedPane tab){
         
         this.fundo = new JPanel();
         this.jPanelBtn = new JPanel();
@@ -114,6 +117,7 @@ public class ImportarDecorator {
         
         this.camField = new JTextField();
         this.dataCriacaoFTF = new JFormattedTextField();
+        this.painelTab = tab;
         
         this.btAvancar = new JButton();
         this.btVoltar = new JButton();
@@ -407,9 +411,19 @@ public class ImportarDecorator {
         
         this.btAvancar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         this.btAvancar.setText("Avançar");
-
+        this.btAvancar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btAvancarActionPerformed(evt);
+            }
+        });
+        
         this.btVoltar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         this.btVoltar.setText("Voltar");
+        this.btVoltar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btVoltarActionPerformed(evt);
+            }
+        }); 
         
         this.btAvancar.setVisible(false);
         this.btImportar.setVisible(false);
@@ -611,7 +625,19 @@ public class ImportarDecorator {
        this.btImportar.setVisible(true);
        this.btAvancar.setVisible(true);
     }
-    
+    private void btAvancarActionPerformed(ActionEvent evt) {
+        this.focusPainel(3);
+        this.habilitarPainel(3, true);
+        this.habilitarPainel(1, false);
+        this.habilitarPainel(2, false);
+    }
+
+    private void btVoltarActionPerformed(ActionEvent evt) {
+        this.focusPainel(0);
+        this.habilitarPainel(0, true);
+        this.habilitarPainel(1, false);
+        this.habilitarPainel(2, false);
+    }    
     private void btImportarActionPerformed(java.awt.event.ActionEvent evt) throws ParseException, IOException {                                           
 
 
@@ -622,5 +648,16 @@ public class ImportarDecorator {
             //pop.setVisible(true);
         
        
+    }
+    
+    
+    private void focusPainel(int tabIndex) {
+        //deve ser assim que funfa...
+        this.painelTab.setSelectedIndex(tabIndex);                            
+    }
+    
+    private void habilitarPainel(int tabIndex, boolean enable) {
+        //deve ser assim que funfa...
+        this.painelTab.setEnabledAt(tabIndex, enable);                            
     }
 }

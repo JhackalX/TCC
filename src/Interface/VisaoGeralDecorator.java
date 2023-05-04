@@ -12,6 +12,7 @@ import static Tabela.Funcionalidades.createObjectDataModel;
 import Tabela.PaginatedTableDecorator;
 import Tabela.PaginationDataProvider;
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
 import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
@@ -54,16 +55,17 @@ public class VisaoGeralDecorator {
     private JButton btnSalvar;
     private JButton btnVoltar;
     
+    private JTabbedPane painelTab;    
     private JTable tabela;
     private final String meses[] = {"Janeiro", "Fervereiro", "Março", "Abril", 
                                     "Maio", "Junho", "Julho", "Agosto", 
                                     "Setembro", "Outubro", "Novembro", "Dezembro"};
         
-    public VisaoGeralDecorator(){
-        this.initComponents();  
+    public VisaoGeralDecorator(JTabbedPane tab){
+        this.initComponents(tab);  
     }
     
-    public void initComponents() {
+    public void initComponents(JTabbedPane tab) {
         
         this.fundo = new JPanel(new BorderLayout());
         this.jPanelDetalhes = new JPanel(new BorderLayout());        
@@ -89,7 +91,7 @@ public class VisaoGeralDecorator {
         this.jTabbedPaneColunas = new JTabbedPane();        
                  
         this.tabela = new JTable(createObjectDataModel());
-        
+        this.painelTab = tab;
     }
     
     public JPanel visaoGeralReady(){
@@ -147,18 +149,27 @@ public class VisaoGeralDecorator {
     private void configureBtns(){
         this.btnAvancar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         this.btnAvancar.setText("Avançar");
-
+        this.btnAvancar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAvancarActionPerformed(evt);
+            }
+        });
+        
         this.btnSalvar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         this.btnSalvar.setText("Salvar");
+        this.btnSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalvarActionPerformed(evt);
+            }
+        });        
         
         this.btnVoltar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        this.btnVoltar.setText("Proximo"); 
-        
-//        this.btnSalvar.addActionListener(new java.awt.event.ActionListener() {
-//            public void actionPerformed(java.awt.event.ActionEvent evt) {
-//                salvarBActionPerformed(evt);
-//            }
-//        });        
+        this.btnVoltar.setText("Voltar"); 
+        this.btnVoltar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVoltarActionPerformed(evt);
+            }
+        });        
     }
     
     private void StatusTab(List<AnaliseMensal> list){
@@ -535,6 +546,34 @@ public class VisaoGeralDecorator {
         this.fundo.add(this.jPanelDetalhes, BorderLayout.CENTER);
      
     }
+    
+    private void btnAvancarActionPerformed(ActionEvent evt) {
+        this.focusPainel(4);
+        this.habilitarPainel(4, true);
+        this.habilitarPainel(3, false);
 
+    }
+
+    private void btnVoltarActionPerformed(ActionEvent evt) {
+        this.focusPainel(0);
+        this.habilitarPainel(0, true);
+        this.habilitarPainel(1, false);
+        this.habilitarPainel(2, false);
+        this.habilitarPainel(3, false);
+    }
+    
+    private void btnSalvarActionPerformed(ActionEvent evt) {
+        System.out.println("SALVAR NO BD!!!");
+    } 
+    
+    private void focusPainel(int tabIndex) {
+        //deve ser assim que funfa...
+        this.painelTab.setSelectedIndex(tabIndex);                            
+    }
+    
+    private void habilitarPainel(int tabIndex, boolean enable) {
+        //deve ser assim que funfa...
+        this.painelTab.setEnabledAt(tabIndex, enable);                            
+    }
     
 }

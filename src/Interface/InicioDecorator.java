@@ -6,11 +6,13 @@ package Interface;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.event.ActionEvent;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
+import javax.swing.JTabbedPane;
 /**
  *
  * @author jacka
@@ -26,14 +28,17 @@ public class InicioDecorator {
     
     private JLabel jLabelOpcaoCSV;
     private JLabel jLabelOpcaoBD;
-
-    public InicioDecorator() {
+    
+    private JTabbedPane painelTab;
+    private JFrame janela;
+    
+    public InicioDecorator(JFrame janela, JTabbedPane tab) {
        
-        this.initComponets();
+        this.initComponets(janela, tab);
 
     }
 
-    private void initComponets() {
+    private void initComponets(JFrame janela, JTabbedPane tab) {
         
         this.fundo = new JPanel(new BorderLayout());
         this.panelBTNs = new JPanel();
@@ -42,7 +47,8 @@ public class InicioDecorator {
         this.btSair = new JButton();
         this.jLabelOpcaoBD = new JLabel();
         this.jLabelOpcaoCSV = new JLabel();
-    
+        this.janela = janela;
+        this.painelTab = tab;
     }
     
     public JPanel InicioReady() {
@@ -96,51 +102,36 @@ public class InicioDecorator {
                 .addContainerGap())
         );
     }
-//    private void configureFundo() {
-//        this.panelBtn();
-//        
-//        this.fundo.setBackground(new java.awt.Color(255, 255, 255));
-//        javax.swing.GroupLayout fundoLayout = new javax.swing.GroupLayout(this.fundo);
-//        this.fundo.setLayout(fundoLayout);
-//        
-//        fundoLayout.setHorizontalGroup(
-//            fundoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-//            .addGroup(fundoLayout.createSequentialGroup()
-//                .addContainerGap()
-//                .addGroup(fundoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-//                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, fundoLayout.createSequentialGroup()
-//                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 
-//                                         GroupLayout.DEFAULT_SIZE, 
-//                                          Short.MAX_VALUE)    
-//                        .addComponent(this.btSair)
-//                        .addContainerGap())
-//                    .addGroup(javax.swing.GroupLayout.Alignment.CENTER, fundoLayout.createSequentialGroup()
-//                        .addComponent(this.panelBTNs, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-//                        .addGap(520, 520, 520))))
-//        );
-//        fundoLayout.setVerticalGroup(
-//            fundoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-//            .addGroup(javax.swing.GroupLayout.Alignment.CENTER, fundoLayout.createSequentialGroup()
-//                .addGap(116, 116, 116)
-//                .addComponent(this.panelBTNs, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-//                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 206, Short.MAX_VALUE)
-//                .addGroup(fundoLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-//                .addComponent(this.btSair))
-//                .addContainerGap())
-//        );
-//    }
 
     private void configureBtn() {
         this.btBD.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/sqlite-database-thumbmail.png")));
         this.btBD.setBackground(Color.WHITE);
         this.btBD.setBorderPainted(false);
         
+        this.btBD.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btBDActionPerformed(evt);
+            }
+        });
+        
         this.btCSV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/Filecsv-thumbnail.png")));
         this.btCSV.setBackground(Color.WHITE);
         this.btCSV.setBorderPainted(false);
         
+        this.btCSV.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btCSVActionPerformed(evt);
+            }
+        }); 
+        
         this.btSair.setFont(new java.awt.Font("Segoe UI", 1, 12));
         this.btSair.setText("Sair");
+        
+        this.btSair.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSairActionPerformed(evt);
+            }
+        });
     }
 
     private void configureLabel() {
@@ -191,5 +182,33 @@ public class InicioDecorator {
                     .addComponent(this.btBD, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+    }
+    
+    private void btCSVActionPerformed(ActionEvent evt) {
+        this.focusPainel(2);        
+        this.habilitarPainel(2, true);
+        this.habilitarPainel(1, false);
+        this.habilitarPainel(0, false);
+    } 
+    
+    private void btBDActionPerformed(ActionEvent evt) {
+        this.focusPainel(1);
+        this.habilitarPainel(1, true);
+        this.habilitarPainel(2, false);
+        this.habilitarPainel(0, false);
+    }    
+
+    private void habilitarPainel(int tabIndex, boolean enable) {
+        //deve ser assim que funfa...
+        this.painelTab.setEnabledAt(tabIndex, enable);                            
+    }
+    
+    private void focusPainel(int tabIndex) {
+        //deve ser assim que funfa...
+        this.painelTab.setSelectedIndex(tabIndex);                            
+    }
+    
+    private void btnSairActionPerformed(ActionEvent evt) {
+        this.janela.dispose();
     }
 }

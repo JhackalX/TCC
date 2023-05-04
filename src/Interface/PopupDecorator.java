@@ -14,6 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -38,15 +39,16 @@ public class PopupDecorator {
     
     private Boolean somaPesos;
     private JFrame janela;
+    private JTabbedPane painelTab;    
     
-    public PopupDecorator() {
+    public PopupDecorator(JTabbedPane tab) {
         
         this.fundo = new JPanel(new GridLayout());
         this.panelBTNs = new JPanel();
         this.avancarBtn = new JButton();
         this.limparBtn = new JButton();
         this.voltarBtn = new JButton();
-  
+        this.painelTab = tab;
     }
         
     public JPanel PopupReady(int Qtd, JFrame janela) {
@@ -267,6 +269,10 @@ public class PopupDecorator {
         }else{
             //aqui deve exportar a lista de pesos
             System.out.println(this.getListaPesos());
+            this.focusPainel(5);
+            this.habilitarPainel(5, true);
+            this.habilitarPainel(4, false);
+            this.habilitarPainel(3, false);
             this.janela.dispose();
         }
     }
@@ -286,4 +292,14 @@ public class PopupDecorator {
     private void voltarBtnActionPerformed(ActionEvent evt) {
         this.janela.dispose();
     }
+    
+    private void focusPainel(int tabIndex) {
+        //deve ser assim que funfa...
+        this.painelTab.setSelectedIndex(tabIndex);                            
+    }
+    
+    private void habilitarPainel(int tabIndex, boolean enable) {
+        //deve ser assim que funfa...
+        this.painelTab.setEnabledAt(tabIndex, enable);                            
+    }    
 }

@@ -4,8 +4,10 @@
  */
 package Interface;
 
+import java.awt.event.ActionEvent;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -20,17 +22,17 @@ class ResultadosDecorator {
     private JPanel jPanelOpcao;
     private JPanel jPanelRelatorio;
        
-    private JButton btSair;
-    private JTextArea jTextAreaRelatorio;        
-
     private JCheckBox jCheckBoxOpcao1;
     private JCheckBox jCheckBoxOpcao2;
     private JCheckBox jCheckBoxOpcao3;
     
+    private JButton btnSair;
+    private JTextArea jTextAreaRelatorio;        
     private JScrollPane jScrollPaneRelatorio;
+    private JFrame janela;
     
-    public ResultadosDecorator() {
-        this.initComponets();
+    public ResultadosDecorator(JFrame janela) {
+        this.initComponets(janela);
         this.configureOpcaoCheckBox();
         this.configureTextArea();
         this.configureBtn();
@@ -46,21 +48,20 @@ class ResultadosDecorator {
         
         return this.fundo; }
 
-    private void initComponets() {
+    private void initComponets(JFrame janela) {
         
         this.fundo = new JPanel();
         this.jPanelOpcao = new JPanel();
         this.jPanelRelatorio = new JPanel();
 
-        this.btSair = new JButton();
-        this.jTextAreaRelatorio = new JTextArea();        
-
         this.jCheckBoxOpcao1 = new JCheckBox();
         this.jCheckBoxOpcao2 = new JCheckBox();
         this.jCheckBoxOpcao3 = new JCheckBox();
 
+        this.btnSair = new JButton();
+        this.jTextAreaRelatorio = new JTextArea();        
         this.jScrollPaneRelatorio = new JScrollPane();
-        
+        this.janela = janela;
     }
 
     private void configureOpcaoCheckBox() {
@@ -140,8 +141,14 @@ class ResultadosDecorator {
     }
 
     private void configureBtn() {
-        this.btSair.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        this.btSair.setText("Sair");
+        this.btnSair.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        this.btnSair.setText("Sair");
+        
+        this.btnSair.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSairActionPerformed(evt);
+            }
+        });        
     }
 
     private void configureFundo() {
@@ -155,7 +162,7 @@ class ResultadosDecorator {
             .addGroup(fundoLayout.createSequentialGroup()
                 .addContainerGap(1182, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(this.btSair)
+                .addComponent(this.btnSair)
                 .addContainerGap())
             .addGroup(fundoLayout.createSequentialGroup()
                 .addContainerGap()
@@ -172,9 +179,12 @@ class ResultadosDecorator {
                 .addComponent(this.jPanelRelatorio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 161, Short.MAX_VALUE)
                 .addGroup(fundoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(this.btSair))
+                    .addComponent(this.btnSair))
                 .addContainerGap())
         );
     }
     
+    private void btnSairActionPerformed(ActionEvent evt) {
+        this.janela.dispose();
+    }    
 }

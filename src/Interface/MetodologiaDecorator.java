@@ -13,9 +13,11 @@ import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle;
@@ -36,7 +38,7 @@ public class MetodologiaDecorator {
     private JPanel jPanelStatus;
     
     private JButton avancarBtn;
-    private JButton retornarBtn;
+    private JButton voltarBtn;
     
     private JLabel jLabelOpcao1;
     private JLabel jLabelOpcao2;
@@ -54,15 +56,15 @@ public class MetodologiaDecorator {
     private JScrollPane jScrollPaneDescricao1;
     private JScrollPane jScrollPaneDescricao2;
     
-    
+    private JTabbedPane painelTab;    
     private ButtonGroup buttonGroupOpcoes;
 
     
-    public MetodologiaDecorator() {
-        this.initComponents();
+    public MetodologiaDecorator(JTabbedPane tab) {
+        this.initComponents(tab);
     }
     
-    public void initComponents(){
+    public void initComponents(JTabbedPane tab){
         
         this.fundo = new JPanel();
         this.jPanelChoosen = new JPanel();
@@ -70,7 +72,7 @@ public class MetodologiaDecorator {
         this.jPanelStatus = new JPanel();
         
         this.avancarBtn = new JButton();
-        this.retornarBtn = new JButton();
+        this.voltarBtn = new JButton();
         
         this.jLabelOpcao1 = new JLabel();
         this.jLabelOpcao2 = new JLabel();
@@ -88,12 +90,13 @@ public class MetodologiaDecorator {
         this.jScrollPaneDetalhes = new JScrollPane();
         this.jScrollPaneDescricao2 = new JScrollPane();
         this.jScrollPaneDescricao1 = new JScrollPane();
-
-        this.buttonGroupOpcoes = new ButtonGroup();
         
-        this.mostrarDescricaoAr(false);                
-        this.mostrarDescricaoEs(false);
-    
+        this.buttonGroupOpcoes = new ButtonGroup();
+        this.painelTab = tab;
+        
+
+//        this.jRadioButtonOpcao1.setFocusable(false);
+//        this.jRadioButtonOpcao2.setFocusable(false);
     }
     
     public JPanel metodologiaReady(){
@@ -101,6 +104,9 @@ public class MetodologiaDecorator {
         this.panelDetalhes();
         this.panelChoosen();
         this.panelFundo();
+        
+        this.mostrarDescricaoAr(false);                
+        this.mostrarDescricaoEs(false);
         
         return this.fundo;
     }
@@ -113,11 +119,11 @@ public class MetodologiaDecorator {
                                                                                javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
                                                                                   javax.swing.border.TitledBorder.DEFAULT_POSITION,
                                                                                             new java.awt.Font("Tahoma", 1, 14))); // NOI18N
-        this.jPanelChoosen.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+//        this.jPanelChoosen.addMouseListener(new java.awt.event.MouseAdapter() {
+//            public void mouseEntered(java.awt.event.MouseEvent evt) {
 //                choosenMouseEntered(evt);
-            }
-        });
+//            }
+//        });
 
         this.jTextAreaDescricao1.setEditable(false);
         this.jTextAreaDescricao1.setColumns(20);
@@ -137,6 +143,7 @@ public class MetodologiaDecorator {
                                                                                                   new java.awt.Font("Tahoma", 1, 12))); // NOI18N
         this.jTextAreaDescricao1.setOpaque(false);
         this.jScrollPaneDescricao1.setViewportView(this.jTextAreaDescricao1);
+        this.jScrollPaneDescricao1.setVisible(false);
 
         this.jTextAreaDescricao2.setEditable(false);
         this.jTextAreaDescricao2.setColumns(20);
@@ -158,12 +165,15 @@ public class MetodologiaDecorator {
         this.jTextAreaDescricao2.setName(""); // NOI18N
         this.jTextAreaDescricao2.setOpaque(false);
         this.jScrollPaneDescricao2.setViewportView(this.jTextAreaDescricao2);
+        this.jScrollPaneDescricao2.setVisible(false);
 
         this.jLabelOpcao2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         this.jLabelOpcao2.setText("Coeficiente (α):");        
+        this.jLabelOpcao2.setVisible(false);
         
         this.jLabelOpcao1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         this.jLabelOpcao1.setText("Nº de Pesos (P):");
+        this.jLabelOpcao1.setVisible(false);
 
         this.jRadioButtonOpcao1.setBackground(new java.awt.Color(255, 255, 255));
         this.buttonGroupOpcoes.add(this.jRadioButtonOpcao1);
@@ -171,9 +181,16 @@ public class MetodologiaDecorator {
         this.jRadioButtonOpcao1.setText("Media Movel Ponderada");
         this.jRadioButtonOpcao1.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
-                opcao1FocusGained(evt);
+//                if(jRadioButtonOpcao1.isSelected()){
+                    opcao1FocusGained(evt);
+//                }
             }
         });        
+//        this.jRadioButtonOpcao1.addFocusListener(new java.awt.event.FocusAdapter() {
+//            public void focusLost(java.awt.event.FocusEvent evt) {
+//                opcao1FocusLost(evt);
+//            }
+//        });        
         
         this.jRadioButtonOpcao2.setBackground(new java.awt.Color(255, 255, 255));
         this.buttonGroupOpcoes.add(this.jRadioButtonOpcao2);
@@ -181,16 +198,21 @@ public class MetodologiaDecorator {
         this.jRadioButtonOpcao2.setText("Alisamento Exponencial");
         this.jRadioButtonOpcao2.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
-                opcao2FocusGained(evt);
+//                if(jRadioButtonOpcao2.isSelected()){
+                    opcao2FocusGained(evt);
+//                }
             }
         });
-       
+//        this.jRadioButtonOpcao2.addFocusListener(new java.awt.event.FocusAdapter() {
+//            public void focusLost(java.awt.event.FocusEvent evt) {
+//                opcao2FocusLost(evt);
+//            }
+//        });
     }
 
-
-    private void choosenMouseEntered(MouseEvent evt) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+//    private void choosenMouseEntered(MouseEvent evt) {
+//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+//    }
     
     private void configureDetalhes(){
 
@@ -237,12 +259,30 @@ public class MetodologiaDecorator {
         this.avancarBtn.setText("Avançar");
         this.avancarBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                avancarBtnActionPerformed(evt);
+                if(jTextFieldcoef.getText().equalsIgnoreCase("") && 
+                   jTextFieldnPesos.getText().equalsIgnoreCase("")){
+                    JOptionPane.showMessageDialog(null,"Os campos de valores devem ser preenchidos!"); 
+                }else{
+                    if(jRadioButtonOpcao1.isSelected() && (!jTextFieldnPesos.getText().equalsIgnoreCase(""))){
+                        avancarBtnPesosActionPerformed(evt);                    
+                    }else{
+                        if(jRadioButtonOpcao2.isSelected() && (!jTextFieldcoef.getText().equalsIgnoreCase(""))){
+                            avancarBtnCoefActionPerformed(evt);
+                        }else{
+                            JOptionPane.showMessageDialog(null,"Os campos de valores devem ser preenchidos!");
+                        }
+                    }                 
+                }
             }
         });
 
-        this.retornarBtn.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        this.retornarBtn.setText("Retornar");
+        this.voltarBtn.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        this.voltarBtn.setText("Voltar");
+        this.voltarBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                voltarBtnActionPerformed(evt);                    
+            }
+        });
     }
     
     private void panelDetalhes(){
@@ -258,14 +298,14 @@ public class MetodologiaDecorator {
             DetalhesLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(DetalhesLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(this.retornarBtn)
+                .addComponent(this.voltarBtn)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED,
                                  GroupLayout.DEFAULT_SIZE,
                                  Short.MAX_VALUE)
                 .addComponent(this.avancarBtn))
             .addComponent(this.jScrollPaneDetalhes,
                               GroupLayout.DEFAULT_SIZE,
-                             980,
+                             400,
                              Short.MAX_VALUE)
         );
         DetalhesLayout.setVerticalGroup(
@@ -276,7 +316,7 @@ public class MetodologiaDecorator {
                 .addGap(60, 60, 60)
                 .addGroup(DetalhesLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(this.avancarBtn)
-                    .addComponent(this.retornarBtn))
+                    .addComponent(this.voltarBtn))
                 .addContainerGap())
         );
     }
@@ -300,7 +340,7 @@ public class MetodologiaDecorator {
                                          GroupLayout.PREFERRED_SIZE))
                     .addComponent(this.jRadioButtonOpcao1,
                                       GroupLayout.PREFERRED_SIZE,
-                                     200,
+                                     GroupLayout.DEFAULT_SIZE,
                                      GroupLayout.PREFERRED_SIZE)
                     .addComponent(this.jScrollPaneDescricao1,
                                       GroupLayout.PREFERRED_SIZE,
@@ -319,7 +359,7 @@ public class MetodologiaDecorator {
                                          GroupLayout.PREFERRED_SIZE))
                     .addComponent(this.jRadioButtonOpcao2,
                                       GroupLayout.PREFERRED_SIZE,
-                                     219,
+                                     GroupLayout.DEFAULT_SIZE,
                                      GroupLayout.PREFERRED_SIZE)
                     .addComponent(this.jScrollPaneDescricao2,
                                       GroupLayout.PREFERRED_SIZE,
@@ -404,25 +444,40 @@ public class MetodologiaDecorator {
                           GroupLayout.DEFAULT_SIZE, 
                           GroupLayout.DEFAULT_SIZE, 
                           Short.MAX_VALUE)
-        );        
+        );
+        this.mostrarDescricaoAr(false);                
+        this.mostrarDescricaoEs(false);
+
     }
 
     private void opcao1FocusGained(FocusEvent evt) {
         this.mostrarDescricaoAr(true);
         this.mostrarDescricaoEs(false);
-    }    
+    }
+    
+//    private void opcao1FocusLost(FocusEvent evt) {
+//        this.mostrarDescricaoAr(false);
+//        this.mostrarDescricaoEs(false);
+//    }    
 
     private void opcao2FocusGained(FocusEvent evt) {
         this.mostrarDescricaoAr(false);
         this.mostrarDescricaoEs(true);    
     }
     
+//    private void opcao2FocusLost(FocusEvent evt) {
+//        this.mostrarDescricaoAr(false);
+//        this.mostrarDescricaoEs(false);
+//    }    
+    
     private void mostrarDescricaoAr(boolean entrada) {
         this.jLabelOpcao1.setVisible(entrada);
         this.jTextFieldnPesos.setVisible(entrada);
         this.jScrollPaneDescricao1.setVisible(entrada);       
         this.jTextAreaDescricao1.setVisible(entrada);
-        
+        if(!entrada){
+            this.jTextFieldnPesos.setText("");
+        }        
         ((AbstractDocument) jTextFieldnPesos.getDocument()).setDocumentFilter(new DocumentFilter() {
             @Override
             public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs)
@@ -438,7 +493,9 @@ public class MetodologiaDecorator {
         this.jTextFieldcoef.setVisible(entrada);
         this.jScrollPaneDescricao2.setVisible(entrada);
         this.jTextAreaDescricao2.setVisible(entrada);
-        
+        if(!entrada){
+            this.jTextFieldcoef.setText("");
+        }
         // cria o DocumentFilter para permitir apenas números float entre 0 e 1
         ((AbstractDocument) jTextFieldcoef.getDocument()).setDocumentFilter(new DocumentFilter() {
             @Override
@@ -460,9 +517,9 @@ public class MetodologiaDecorator {
         });        
     }
     
-    private void avancarBtnActionPerformed(ActionEvent evt) {
+    private void avancarBtnPesosActionPerformed(ActionEvent evt) {
         JFrame janela = new JFrame();
-        PopupDecorator popup = new PopupDecorator();
+        PopupDecorator popup = new PopupDecorator(this.painelTab);
         JScrollPane jScrollPanePopup = new JScrollPane();
         
         janela.setSize(447,312);
@@ -475,5 +532,34 @@ public class MetodologiaDecorator {
         janela.add(jScrollPanePopup);
         janela.repaint();
         janela.show();
-    }      
+    }    
+    
+    private void avancarBtnCoefActionPerformed(ActionEvent evt) {
+        this.focusPainel(5);
+        this.habilitarPainel(5, true);
+        this.habilitarPainel(4, false);
+        this.habilitarPainel(3, false);
+    }
+    
+    private void voltarBtnActionPerformed(ActionEvent evt) {
+        this.focusPainel(3);
+        this.habilitarPainel(3, true);
+        this.habilitarPainel(5, false);
+        this.habilitarPainel(4, false);
+    }    
+    
+    private void focusPainel(int tabIndex) {
+        //deve ser assim que funfa...
+        this.painelTab.setSelectedIndex(tabIndex);                            
+    }
+    
+    private void habilitarPainel(int tabIndex, boolean enable) {
+        //deve ser assim que funfa...
+        this.painelTab.setEnabledAt(tabIndex, enable);                            
+    }
+
+//    private void choosenMouseEntered(MouseEvent evt) {
+//        this.mostrarDescricaoAr(false);
+//        this.mostrarDescricaoEs(false);
+//    }    
 }

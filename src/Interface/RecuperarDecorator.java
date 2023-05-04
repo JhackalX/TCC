@@ -6,6 +6,7 @@ package Interface;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -13,6 +14,7 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -61,15 +63,16 @@ public class RecuperarDecorator {
     private JScrollPane jScrollPaneTabela;
     private JTextArea jTextAreaAjuda;    
     private JTable jTableBanco;
+    private JTabbedPane painelTab;
     
-    public RecuperarDecorator() {
+    public RecuperarDecorator(JTabbedPane tab) {
 
-        this.initComponets();
+        this.initComponets(tab);
         this.configureInfoFields();        
         
     }
     
-    public void initComponets(){
+    public void initComponets(JTabbedPane tab){
         
         this.fundo = new JPanel();
         this.jPanelSuperio = new JPanel();
@@ -108,7 +111,7 @@ public class RecuperarDecorator {
         
         this.btAvancar = new JButton();
         this.btVoltar = new JButton();
-        
+        this.painelTab = tab;
         this.jScrollPaneTabela.setViewportView(this.jTableBanco);
     }
     
@@ -373,10 +376,20 @@ public class RecuperarDecorator {
 
         this.btAvancar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         this.btAvancar.setText("Avançar");
-
+        this.btAvancar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btAvancarActionPerformed(evt);
+            }
+        });
+        
         this.btVoltar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         this.btVoltar.setText("Voltar");
-
+        this.btVoltar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btVoltarActionPerformed(evt);
+            }
+        });
+        
         javax.swing.GroupLayout BtnLayout = new javax.swing.GroupLayout(this.jPanelBtn);
         this.jPanelBtn.setLayout(BtnLayout);
         BtnLayout.setHorizontalGroup(
@@ -564,5 +577,26 @@ public class RecuperarDecorator {
         );
 
     }
+    private void btAvancarActionPerformed(ActionEvent evt) {
+        this.focusPainel(3);
+        this.habilitarPainel(3, true);
+        this.habilitarPainel(1, false);
+        this.habilitarPainel(2, false);
+    }
 
+    private void btVoltarActionPerformed(ActionEvent evt) {
+        this.focusPainel(0);
+        this.habilitarPainel(0, true);
+        this.habilitarPainel(1, false);
+        this.habilitarPainel(2, false);
+    }    
+   private void focusPainel(int tabIndex) {
+        //deve ser assim que funfa...
+        this.painelTab.setSelectedIndex(tabIndex);                            
+    }
+    
+    private void habilitarPainel(int tabIndex, boolean enable) {
+        //deve ser assim que funfa...
+        this.painelTab.setEnabledAt(tabIndex, enable);                            
+    }
 }

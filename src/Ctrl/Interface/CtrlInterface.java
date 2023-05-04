@@ -5,7 +5,8 @@
  */
 package Ctrl.Interface;
 
-import Ctrl.Geral.CtrlGeral;
+import Interface.WindowDecorator;
+import java.awt.BorderLayout;
 import javax.swing.JFrame;
 
 /**
@@ -13,26 +14,47 @@ import javax.swing.JFrame;
  * @author jacka
  */
 public class CtrlInterface {
+    private JFrame janela;
+    private CtrlInterface ctrl;
     
-//    private Layout tela;
-    private CtrlGeral principal;
-    private CtrlGeral gerDominio;
+    private WindowDecorator windowDeorator;    
 
     public CtrlInterface() {
-        gerDominio = new CtrlGeral();
-        
+        this.initComponets();
+      
     }
-    
+    public static CtrlInterface ctrlInterface () {
+        
+        CtrlInterface ctrl = new CtrlInterface();
+        
+        return ctrl;
+    }    
     public void ExibirJanela(){
         JFrame.setDefaultLookAndFeelDecorated(true);
-//        tela = new Layout();
-//        tela.setVisible(true);
+        this.janela.setVisible(true);
     }
     
-    public void InicializarComponente(){
-//        tela.iniciarVariaveis();
+   private void initComponets(){
+
+        this.janela = new JFrame();
+        this.janela.setSize(1200, 600);
+        this.janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        this.janela.setVisible(true);
+        this.janela.setLayout(new BorderLayout());
+        //this.face.setBackground(Color.red);        
+        this.windowDeorator = WindowDecorator.decorator(this.janela);
+        
+        this.janela.repaint();        
     }
 
+    public void InterfaceReady(){
+        this.janela.setVisible(true);
+    }
+
+    public JFrame getJanela(){
+        return this.janela;
+    }
+    
     public void DescricaoArVisible(boolean entrada){
 //        tela.mostrarDescricaoAr(entrada);
     }

@@ -12,6 +12,7 @@ import static Tabela.Funcionalidades.createObjectDataModel;
 import Tabela.PaginatedTableDecorator;
 import Tabela.PaginationDataProvider;
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
 import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
@@ -54,16 +55,17 @@ public class VisaoAuxiliarDecorator {
     private JButton salvarBtn;
     private JButton voltarBtn;
     
+    private JTabbedPane painelTab;    
     private JTable tabela;
     private final String meses[] = {"Janeiro", "Fervereiro", "Março", "Abril", 
                                     "Maio", "Junho", "Julho", "Agosto", 
                                     "Setembro", "Outubro", "Novembro", "Dezembro"};
     
-    public VisaoAuxiliarDecorator(){
-        this.initComponents();
+    public VisaoAuxiliarDecorator(JTabbedPane tab){
+        this.initComponents(tab);
     }
     
-    public void initComponents(){
+    public void initComponents(JTabbedPane tab){
 
         this.fundo = new JPanel(new BorderLayout());
         this.jPanelTable = new JPanel();
@@ -90,6 +92,7 @@ public class VisaoAuxiliarDecorator {
         this.voltarBtn = new JButton();
         
         this.tabela = new JTable(createObjectDataModel());    
+        this.painelTab = tab;
     }
 
     public JPanel visaoAuxiliarReady(){
@@ -105,12 +108,25 @@ public class VisaoAuxiliarDecorator {
     private void configureBtns(){
         this.avancarBtn.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         this.avancarBtn.setText("Avançar");
-
+        this.avancarBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                avancarBtnActionPerformed(evt);
+            }
+        });
         this.salvarBtn.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         this.salvarBtn.setText("Salvar");   
-        
+        this.salvarBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                salvarBtnActionPerformed(evt);
+            }
+        });        
         this.voltarBtn.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        this.voltarBtn.setText("Voltar");        
+        this.voltarBtn.setText("Voltar"); 
+        this.voltarBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                voltarBtnActionPerformed(evt);
+            }
+        }); 
     }
 
     private void configureAjuda(){
@@ -522,4 +538,32 @@ public class VisaoAuxiliarDecorator {
         this.fundo.add(this.jPanelTable, BorderLayout.NORTH);
         this.fundo.add(this.jPanelDetalhes, BorderLayout.CENTER);        
     }
+    
+    private void avancarBtnActionPerformed(ActionEvent evt) {
+        this.focusPainel(6);
+        this.habilitarPainel(6, true);
+        this.habilitarPainel(5, false);
+
+    }
+
+    private void voltarBtnActionPerformed(ActionEvent evt) {
+        this.focusPainel(4);
+        this.habilitarPainel(4, true);
+        this.habilitarPainel(5, false);
+        this.habilitarPainel(6, false);
+    }
+    
+    private void salvarBtnActionPerformed(ActionEvent evt) {
+        System.out.println("SALVAR NO BD!!!");
+    } 
+    
+    private void focusPainel(int tabIndex) {
+        //deve ser assim que funfa...
+        this.painelTab.setSelectedIndex(tabIndex);                            
+    }
+    
+    private void habilitarPainel(int tabIndex, boolean enable) {
+        //deve ser assim que funfa...
+        this.painelTab.setEnabledAt(tabIndex, enable);                            
+    }    
 }
